@@ -1,10 +1,17 @@
-import Container from "react-bootstrap/Container";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "./Routes/Login";
+
+const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <Login/>
+  }
+])
+
 
 function App() {
   return (
-    <Container className="p-4">
-      <h1 className="header">Wyzwanie</h1>
-    </Container>
+    <RouterProvider router={router}/>
   );
 }
 

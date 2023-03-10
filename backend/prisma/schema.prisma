@@ -11,7 +11,20 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String @unique
-  password String
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  name       String      @unique
+  password   String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  challanges Challange[]
+}
+
+model Challange {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String   @db.ObjectId
 }

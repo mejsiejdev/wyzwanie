@@ -36,11 +36,21 @@ const Register = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column gap-3">
             <div className="d-flex flex-column gap-2">
               <label htmlFor={id + "-name"}>Name</label>
-              <input {...register("name")} id={id + "-name"} type={"text"} />
+              <input
+                {...register("name")}
+                id={id + "-name"}
+                type={"text"}
+                className="rounded-2 py-1 px-2"
+              />
             </div>
             <div className="d-flex flex-column gap-2">
               <label htmlFor={id + "-password"}>Password</label>
-              <input {...register("password")} id={id + "-password"} type={"password"} />
+              <input
+                {...register("password")}
+                id={id + "-password"}
+                type={"password"}
+                className="rounded-2 py-1 px-2"
+              />
             </div>
             <div className="d-flex justify-content-end">
               <Button type={"submit"} variant={"primary"}>

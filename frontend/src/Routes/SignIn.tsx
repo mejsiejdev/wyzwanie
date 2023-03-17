@@ -1,6 +1,6 @@
 import Container from "react-bootstrap/Container";
-import {MdEmail} from "react-icons/md";
-import {RiLockPasswordFill} from 'react-icons/ri';
+import { MdEmail } from "react-icons/md";
+import { RiLockPasswordFill } from "react-icons/ri";
 
 export default function SignIn() {
   return (
@@ -21,7 +21,7 @@ export default function SignIn() {
           </div>
           <div className="mb-3">
             <label className="form-label gap-1 items-center">
-              <RiLockPasswordFill/> Password
+              <RiLockPasswordFill /> Password
             </label>
             <input
               type="password"

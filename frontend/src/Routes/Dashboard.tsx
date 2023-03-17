@@ -1,31 +1,30 @@
 import { MdCheck } from "react-icons/md";
+import Box from "../components/Box";
 
 const Dashboard = () => {
   return (
-    <div className="d-flex w-100 min-vh-100 p-4 bg-light">
-      <div className="d-flex w-100 container flex-column gap-3">
-        <div className="d-flex flex-row align-items-center justify-content-between w-100">
-          <h1>Dashboard</h1>
-          <span className="rounded-circle bg-info" style={{ height: "2rem", width: "2rem" }} />
-        </div>
-        <div className="d-flex flex-column gap-3">
-          <Task
-            content="Complete making the dashboard"
-            expiresAt={"2023-03-25T00:00:00Z"}
-            completedAt={""}
-          />
-          <Task
-            content="Clean up the backend"
-            expiresAt={"2023-04-23T00:00:00Z"}
-            completedAt={""}
-          />
-        </div>
+    <>
+      <div className="d-flex flex-row align-items-center justify-content-between w-100">
+        <h1>Dashboard</h1>
+        <span className="rounded-circle bg-info" style={{ height: "2rem", width: "2rem" }} />
       </div>
-    </div>
+      <div className="d-flex flex-column gap-3 w-100">
+        <Challange
+          content="Complete making the dashboard"
+          expiresAt={"2023-03-25T00:00:00Z"}
+          completedAt={""}
+        />
+        <Challange
+          content="Clean up the backend"
+          expiresAt={"2023-04-23T00:00:00Z"}
+          completedAt={""}
+        />
+      </div>
+    </>
   );
 };
 
-const Task = ({
+const Challange = ({
   content,
   expiresAt,
   completedAt,
@@ -34,7 +33,7 @@ const Task = ({
   expiresAt: string;
   completedAt: string;
 }) => (
-  <div className="shadow-sm p-3 border border-light rounded-3 bg-white">
+  <Box>
     <div className="d-flex flex-row align-items-center justify-content-between gap-3">
       <h3>{content}</h3>
       <MdCheck style={{ fontSize: "2rem", flex: "none" }} />
@@ -50,7 +49,7 @@ const Task = ({
         )}
       </p>
     </div>
-  </div>
+  </Box>
 );
 
 export default Dashboard;

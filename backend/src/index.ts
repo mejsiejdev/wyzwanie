@@ -8,8 +8,10 @@ const port = process.env.PORT;
 
 // Import routes' routers
 import user from "./routes/user";
+import challenge from './routes/challenge';
 
 app.use("/user", user);
+app.use("/tasks", challenge);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");

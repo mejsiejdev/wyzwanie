@@ -3,9 +3,10 @@ import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Box from "../components/Box";
 
+
 type Inputs = {
-  name: string;
-  password: string;
+  content: string;
+  expiresAt: Date;
 };
 
 const Create = () => {
@@ -16,7 +17,7 @@ const Create = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) =>
-    fetch("http://localhost:8000/user", {
+    fetch("http://localhost:8000/challenge", {
       method: "post",
       mode: "cors",
       headers: {
@@ -35,26 +36,25 @@ const Create = () => {
           <h1>Create new task</h1>
           <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column gap-3 w-100">
             <div className="d-flex flex-column gap-2">
-              <label htmlFor={id + "-name"}>Name</label>
-              <input
-                {...register("name")}
-                id={id + "-name"}
-                type={"text"}
+              <label htmlFor={id + "-content"}>Content</label>
+              <textarea
+                {...register("content", {required: true})}
+                id={id + "-content"}
                 className="rounded-2 py-1 px-2"
               />
             </div>
             <div className="d-flex flex-column gap-2">
-              <label htmlFor={id + "-password"}>Password</label>
+              <label htmlFor={id + "-expiresAt"}>Expiration date</label>
               <input
-                {...register("password")}
-                id={id + "-password"}
-                type={"password"}
+                {...register("expiresAt", {required: true})}
+                id={id + "-expiresAt"}
+                type={"datetime-local"}
                 className="rounded-2 py-1 px-2"
               />
             </div>
             <div className="d-flex justify-content-end">
               <Button type={"submit"} variant={"primary"}>
-                Register
+                Create
               </Button>
             </div>
           </form>

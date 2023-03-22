@@ -37,7 +37,7 @@ const Register = () => {
             <div className="d-flex flex-column gap-2">
               <label htmlFor={id + "-name"}>Name</label>
               <input
-                {...register("name")}
+                {...register("name", {required: true})}
                 id={id + "-name"}
                 type={"text"}
                 className="rounded-2 py-1 px-2"
@@ -46,7 +46,7 @@ const Register = () => {
             <div className="d-flex flex-column gap-2">
               <label htmlFor={id + "-password"}>Password</label>
               <input
-                {...register("password")}
+                {...register("password", {required: true})}
                 id={id + "-password"}
                 type={"password"}
                 className="rounded-2 py-1 px-2"

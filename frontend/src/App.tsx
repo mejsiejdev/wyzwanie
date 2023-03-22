@@ -4,12 +4,18 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./routes/Dashboard";
 import Register from "./routes/Register";
 import SignIn from "./routes/SignIn";
+import Create from "./routes/Create";
 
 const router = createBrowserRouter([
   // Dashboard
   {
     path: "/",
     element: <Dashboard />,
+  },
+  // Create task
+  {
+    path: "/create",
+    element: <Create />,
   },
   // Register
   {

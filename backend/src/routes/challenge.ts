@@ -4,9 +4,8 @@ import { prisma } from "../../lib/db";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const challenges = await prisma.challange.findMany();
+  const challenges = await prisma.challenge.findMany();
   res.json(challenges);
-  
 });
 
 export default router;

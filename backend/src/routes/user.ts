@@ -2,7 +2,6 @@ import express from "express";
 import { prisma } from "../../lib/db";
 import bcrypt from "bcrypt";
 
-
 const router = express.Router();
 
 // /users/
@@ -11,27 +10,21 @@ router.get("/", async (req, res) => {
   res.json(users);
 });
 
-router.post('/', async(req,res) => {
-  const {name, password} = req.body;
+router.post("/", async (req, res) => {
+  const { name, password } = req.body;
 
-  bcrypt.hash(password, 3, async function(err, hash) {
-    if(err){
-      res.status(500)
-      console.error(err)
+  bcrypt.hash(password, 3, async function (err, hash) {
+    if (err) {
+      res.status(500);
+      console.error(err);
     }
     await prisma.user.create({
       data: {
         name: name,
-        password: hash
-      }
-    })
+        password: hash,
+      },
+    });
   });
-
-
-
-
-
-})
-
+});
 
 export default router;

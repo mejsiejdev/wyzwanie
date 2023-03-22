@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 const router = express.Router();
 
-// /users/
+// /user/
 router.get("/", async (req, res) => {
   const users = await prisma.user.findMany();
   res.json(users);

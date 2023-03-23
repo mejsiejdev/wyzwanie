@@ -28,4 +28,5 @@ model Challenge {
   completedAt DateTime?
   author      User      @relation(fields: [authorId], references: [id])
   authorId    String    @db.ObjectId
+  points      Int
 }

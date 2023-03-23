@@ -8,4 +8,19 @@ router.get("/", async (req, res) => {
   res.json(challenges);
 });
 
+router.get("/", async (req, res) => {
+  const { content, expiresAt, points } = req.body;
+  try {
+    await prisma.challenge.create({
+      data: {
+        content: content,
+        expiresAt: expiresAt,
+        points: points,
+      },
+    });
+  } catch {
+    res.status(500);
+  }
+});
+
 export default router;

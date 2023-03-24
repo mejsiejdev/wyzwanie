@@ -1,6 +1,7 @@
 import express from "express";
 import { prisma } from "../../lib/db";
-import bcrypt from "bcrypt";
+import { hash } from "bcrypt";
+import { sign } from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -12,19 +13,33 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { name, password } = req.body;
-
-  bcrypt.hash(password, 3, async function (err, hash) {
-    if (err) {
-      res.status(500);
-      console.error(err);
+  try {
+    const hashed = await hash(password, 12);
+    try {
+      const user = await prisma.user.create({
+        data: {
+          name: name,
+          password: hashed,
+        },
+      });
+      try {
+        const token = sign(user, process.env.JWT_SECRET!, { expiresIn: "1h" });
+        res.status(201).json(token);
+        return;
+      } catch {
+        res.status(500).end("Server error.");
+        return;
+      }
+    } catch {
+      res
+        .status(400)
+        .end("Account with specified name already exists in the database.");
+      return;
     }
-    await prisma.user.create({
-      data: {
-        name: name,
-        password: hash,
-      },
-    });
-  });
+  } catch {
+    res.status(500).end("Server error.");
+    return;
+  }
 });
 
 export default router;

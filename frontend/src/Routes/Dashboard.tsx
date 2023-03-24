@@ -1,7 +1,17 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { MdCheck } from "react-icons/md";
 import Box from "../components/Box";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  console.log(sessionStorage.getItem("JWT") === null);
+  useEffect(() => {
+    if (sessionStorage.getItem("JWT") === null) {
+      navigate("/signin");
+    }
+    // fetch data here
+  }, []);
   return (
     <>
       <div className="d-flex flex-row align-items-center justify-content-between w-100">

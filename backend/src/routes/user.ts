@@ -13,8 +13,10 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { name, password } = req.body;
+  // Hash the password
   try {
     const hashed = await hash(password, 12);
+    // Create the user
     try {
       const user = await prisma.user.create({
         data: {
@@ -22,8 +24,13 @@ router.post("/", async (req, res) => {
           password: hashed,
         },
       });
+      // Sign and return a token
       try {
-        const token = sign(user, process.env.JWT_SECRET!, { expiresIn: "1h" });
+        const token = sign(
+          { id: user.id, name: user.name, password: user.password },
+          process.env.JWT_SECRET!,
+          { expiresIn: "1h" }
+        );
         res.status(201).json(token);
         return;
       } catch {

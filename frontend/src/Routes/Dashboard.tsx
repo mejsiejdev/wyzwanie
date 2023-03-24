@@ -5,12 +5,19 @@ import Box from "../components/Box";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  console.log(sessionStorage.getItem("JWT") === null);
   useEffect(() => {
+    // Check if JWT exists in the storage
     if (sessionStorage.getItem("JWT") === null) {
       navigate("/signin");
     }
-    // fetch data here
+    // Fetch challenges
+    fetch("http://localhost:8000/challenge", {
+      method: "get",
+      mode: "cors",
+      headers: {
+        Authorization: `${sessionStorage.getItem("JWT")}`,
+      },
+    });
   }, []);
   return (
     <>

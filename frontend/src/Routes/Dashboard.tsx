@@ -17,6 +17,8 @@ const Dashboard = () => {
       headers: {
         Authorization: `${sessionStorage.getItem("JWT")}`,
       },
+    }).then((response) => {
+      console.log(response.body);
     });
   }, []);
   return (
@@ -26,7 +28,7 @@ const Dashboard = () => {
         <span className="rounded-circle bg-info" style={{ height: "2rem", width: "2rem" }} />
       </div>
       <div className="d-flex flex-column gap-3 w-100">
-        <Challange
+        {/* <Challange
           content="Complete making the dashboard"
           expiresAt={"2023-03-25T00:00:00Z"}
           completedAt={""}
@@ -35,7 +37,8 @@ const Dashboard = () => {
           content="Clean up the backend"
           expiresAt={"2023-04-23T00:00:00Z"}
           completedAt={""}
-        />
+        /> */}
+
       </div>
     </>
   );

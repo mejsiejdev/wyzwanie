@@ -16,13 +16,16 @@ const Create = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
+    console.log(sessionStorage.getItem('JWT'))
     fetch("http://localhost:8000/challenge", {
       method: "post",
       mode: "cors",
       headers: {
-        "Content-Type": "application/json",
+       "Content-Type": "application/json",
+        "Authorization": `${sessionStorage.getItem("JWT")}`,
       },
       body: JSON.stringify(data),
     })

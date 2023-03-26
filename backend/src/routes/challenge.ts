@@ -34,8 +34,10 @@ router.get("/", async (req, res) => {
             where: {
               authorId: user.id,
             },
+            orderBy: {
+              expiresAt: "asc",
+            },
           });
-          console.log("Challenges:", challenges);
           res.status(200).json(challenges);
         }
       } catch {
@@ -50,25 +52,17 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { content, expiresAt, points } = req.body;
   const decoded = verify(req.headers.authorization!, process.env.JWT_SECRET!);
-  // @ts-ignore
-  const id = decoded.id;
 
-  console.log("niggasniggas");
-
-  try {
-    await prisma.challenge.create({
-      data: {
-        content: content,
-        expiresAt: expiresAt,
-        points: points,
-        authorId: id,
-      },
-    });
-  } catch {
-    res.status(500);
-    return;
-  }
-  res.status(201).end('Created new Challenge.');
+  await prisma.challenge.create({
+    data: {
+      content: content,
+      expiresAt: new Date(expiresAt),
+      points: parseInt(points),
+      // @ts-ignore
+      authorId: decoded.id,
+    },
+  });
+  res.status(201).end("Created new Challenge.");
 });
 
 export default router;

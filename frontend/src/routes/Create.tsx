@@ -2,6 +2,7 @@ import { useId } from "react";
 import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Box from "../components/Box";
+import { useNavigate } from "react-router-dom";
 
 type Inputs = {
   content: string;
@@ -10,6 +11,7 @@ type Inputs = {
 };
 
 const Create = () => {
+  const navigate = useNavigate();
   const id = useId();
   const {
     register,
@@ -19,18 +21,19 @@ const Create = () => {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
-    console.log(sessionStorage.getItem('JWT'))
+    console.log(sessionStorage.getItem("JWT"));
     fetch("http://localhost:8000/challenge", {
       method: "post",
       mode: "cors",
       headers: {
-       "Content-Type": "application/json",
-        "Authorization": `${sessionStorage.getItem("JWT")}`,
+        "Content-Type": "application/json",
+        Authorization: `${sessionStorage.getItem("JWT")}`,
       },
       body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    }).then((response) => {
+      if (response.ok) navigate("/");
+      // TODO: Handle the case when the challenge creation fails.
+    });
   };
   const nextDay = new Date();
   return (
@@ -39,7 +42,7 @@ const Create = () => {
       style={{ maxWidth: "28rem" }}>
       <Box>
         <div className="d-flex flex-column align-items-center gap-3 w-100">
-          <h1>Create new task</h1>
+          <h1>Create new challenge</h1>
           <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column gap-3 w-100">
             <div className="d-flex flex-column gap-2">
               <label htmlFor={id + "-content"}>Content</label>

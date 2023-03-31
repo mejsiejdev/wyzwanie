@@ -46,6 +46,10 @@ router.get("/", async (req, res) => {
   const challenges = await prisma.challenge.findMany({
     where: {
       authorId: res.locals.userId,
+      content: {
+        contains:
+          req.query.filter != "" ? req.query.filter?.toString() : undefined,
+      },
     },
     orderBy: {
       expiresAt: "asc",
@@ -65,6 +69,27 @@ router.post("/", async (req, res) => {
     },
   });
   res.status(201).end("Created new Challenge.");
+});
+
+router.patch("/", async (req, res) => {
+  // Extract challenge id
+  const { id } = req.body;
+  // Update task
+  try {
+    await prisma.challenge.update({
+      where: {
+        id: id,
+      },
+      data: {
+        completedAt: new Date(),
+      },
+    });
+  } catch {
+    // Return server error if something goes wrong
+    res.status(500).end("Server error.");
+  }
+  // Return successful response if everything goes fine
+  res.status(200).end("Successfully set challenge as complete.");
 });
 
 export default router;

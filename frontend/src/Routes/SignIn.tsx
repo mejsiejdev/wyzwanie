@@ -1,9 +1,9 @@
 import { useId, useState } from "react";
-import Container from "react-bootstrap/Container";
 import { AiOutlineUser } from "react-icons/ai";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Box from "../components/Box/Box";
 
 type Inputs = {
   name: String;
@@ -20,10 +20,10 @@ export default function SignIn() {
     handleSubmit,
     formState: { errors },
     reset,
-    setError
+    setError,
   } = useForm<Inputs>();
 
-  const onSubmit:SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
     await fetch("http://localhost:8000/user/signin", {
       method: "post",
@@ -37,7 +37,7 @@ export default function SignIn() {
         if (response.ok) {
           return response.json();
         } else {
-          setError("name", { type: "value", message: "Account with this name already exists." });
+          setError("name", { type: "value", message: "Wrong user credentials ❗❗❗❗" });
           reset({}, { keepErrors: true, keepValues: true });
         }
       })
@@ -47,12 +47,14 @@ export default function SignIn() {
           navigate("/");
         }
       });
-      setLoading(false);
-  }
+    setLoading(false);
+  };
 
   return (
-    <Container className="p-3 min-vh-100 bg-opacity-25 d-flex justify-content-center align-items-center">
-      <div className="row p-3 m-10 d-flex justify-content-center align-items fw-semibold rounded-4 bg-light border border-opacity-25 border-success">
+    <div
+      className="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+      style={{ maxWidth: "28rem" }}>
+      <Box>
         <p className="fs-1 text-center fw-bold">Sign in</p>
         <form className="p-3" method="POST" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
@@ -60,33 +62,39 @@ export default function SignIn() {
               <AiOutlineUser /> Username
             </label>
             <input
-              {...register("name", {required: true})}
+              {...register("name", { required: true })}
               type="text"
               className="form-control bg-opacity-50"
               id={id + "-name"}
               style={{ backgroundColor: "rgb(213, 235, 214)" }}
               name="name"
             />
-             {errors.name && <p className="text-danger mb-0">{errors.name.message}</p>}
+            {errors.name && <p className="text-danger mb-0">{errors.name.message}</p>}
           </div>
           <div className="mb-3">
             <label className="form-label gap-1 items-center" htmlFor={id + "-password"}>
               <RiLockPasswordFill /> Password
             </label>
             <input
-            {...register("password", {required: true})}
+              {...register("password", { required: true })}
               type="password"
               id={id + "-password"}
               style={{ backgroundColor: "rgb(213, 235, 214)" }}
               className="form-control"
             />
-             {errors.name && <p className="text-danger mb-0">{errors.name.message}</p>}
+            {errors.name && <p className="text-danger mb-0">{errors.name.message}</p>}
           </div>
-          <button type="submit" className="btn btn-success fw-semibold" disabled={loading}>
-           {loading ?  "Loading...": "Sign in"}
-          </button>
+          <div className="d-flex flex-row align-items-center justify-content-between">
+            <a className="mb-0 text-success" href={"/register"}>
+              {" "}
+              Don't have an account?
+            </a>
+            <button type="submit" className="btn btn-success fw-semibold" disabled={loading}>
+              {loading ? "Loading..." : "Sign in"}
+            </button>
+          </div>
         </form>
-      </div>
-    </Container>
+      </Box>
+    </div>
   );
 }

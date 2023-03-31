@@ -4,7 +4,8 @@ import { prisma } from "../../lib/db";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+// Authenticate before doing anything
+router.use(async (req, res, next) => {
   if (!req.headers.authorization) {
     res.status(401).end("Lack of authorization header.");
   } else {
@@ -13,7 +14,6 @@ router.get("/", async (req, res) => {
         req.headers.authorization,
         process.env.JWT_SECRET!
       );
-      console.log(decoded);
       try {
         const user = await prisma.user.findUnique({
           where: {
@@ -30,15 +30,8 @@ router.get("/", async (req, res) => {
         ) {
           res.status(401).end("Falsified token.");
         } else {
-          const challenges = await prisma.challenge.findMany({
-            where: {
-              authorId: user.id,
-            },
-            orderBy: {
-              expiresAt: "asc",
-            },
-          });
-          res.status(200).json(challenges);
+          res.locals.userId = user.id;
+          next();
         }
       } catch {
         res.status(500).end("Server error.");
@@ -49,17 +42,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  const challenges = await prisma.challenge.findMany({
+    where: {
+      authorId: res.locals.userId,
+    },
+    orderBy: {
+      expiresAt: "asc",
+    },
+  });
+  res.status(200).json(challenges);
+});
+
 router.post("/", async (req, res) => {
   const { content, expiresAt, points } = req.body;
-  const decoded = verify(req.headers.authorization!, process.env.JWT_SECRET!);
-
   await prisma.challenge.create({
     data: {
       content: content,
       expiresAt: new Date(expiresAt),
       points: parseInt(points),
-      // @ts-ignore
-      authorId: decoded.id,
+      authorId: res.locals.userId,
     },
   });
   res.status(201).end("Created new Challenge.");

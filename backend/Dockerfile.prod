@@ -1,0 +1,6 @@
+FROM node:19-alpine
+WORKDIR /app
+COPY . .
+RUN npm i
+CMD ["npm", "run", "build", "&&", "npm", "run", "start"]
+EXPOSE 8000

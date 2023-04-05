@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  frontend: 
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+    container_name: Frontend
+  backend:
+    depends_on:
+      - mongodb
+    build: ./backend
+    ports:
+      - 8000:8000
+    container_name: Backend
+  mongodb:
+    image: prismagraphql/mongo-single-replica:4.4.3-bionic
+    environment:
+      MONGODB_INITDB_ROOT_USERNAME: user
+      MONGODB_INITDB_ROOT_PASSWORD: pass
+      INIT_WAIT_SEC: 3
+    ports:
+    - 27017:27017
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data/db

@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  frontend: 
+  frontend:
     build: ./frontend
     depends_on:
       - backend
@@ -10,20 +10,28 @@ services:
     container_name: Frontend
   backend:
     depends_on:
-      - mongodb
+      - mongodb_migrate
     build: ./backend
     ports:
       - 8000:8000
     container_name: Backend
-  mongodb:
-    image: prismagraphql/mongo-single-replica:4.4.3-bionic
+
+  mongodb_migrate:
+    image: mongo:latest
+    restart: always
     environment:
-      MONGODB_INITDB_ROOT_USERNAME: user
-      MONGODB_INITDB_ROOT_PASSWORD: pass
-      INIT_WAIT_SEC: 3
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: prisma
     ports:
-    - 27017:27017
-    volumes:
-      - type: bind
-        source: ./data
-        target: /data/db
+      - '27017:27017'
+
+  # Replica Set (required for Prisma Client)
+  mongo:
+    build: ./mongodb_replica
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: prisma
+      MONGO_REPLICA_HOST: localhost
+      MONGO_REPLICA_PORT: 27018
+    ports:
+      - '27018:27018'

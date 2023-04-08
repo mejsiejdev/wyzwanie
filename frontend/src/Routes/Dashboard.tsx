@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdAccountCircle, MdAdd, MdCheck, MdRefresh, MdSearch } from "react-icons/md";
 import Box from "../components/Box";
-import { Button } from "react-bootstrap";
+import { Button, Overlay, Tooltip } from "react-bootstrap";
 import useDebounce from "../hooks/useDebounce";
 
 type Challenge = {
@@ -65,7 +65,7 @@ const Dashboard = () => {
     <>
       <div className="d-flex flex-row align-items-center justify-content-between w-100">
         <h1>Dashboard</h1>
-        <MdAccountCircle className="fs-2" />
+        <UserSection />
       </div>
       <div className="d-flex flex-column gap-3 w-100">
         <div className="d-flex flex-row gap-3 w-100 align-items-center justify-content-between">
@@ -107,6 +107,49 @@ const Dashboard = () => {
           )
         )}
       </div>
+    </>
+  );
+};
+
+const UserSection = () => {
+  const [show, setShow] = useState<boolean>(false);
+  const target = useRef(null);
+  const [data, setData] = useState<{ name: string; photo: string }>();
+  useEffect(() => {
+    fetch("http://localhost:8000/user/photo", {
+      method: "GET",
+      headers: {
+        Authorization: `${sessionStorage.getItem("JWT")}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        if (response.status === 500) {
+          // TODO: Add some sort of error modal
+          console.log("Something went horribly wrong...");
+        }
+      })
+      .then((data) => setData(data));
+  });
+  return !data ? (
+    <p>Loading...</p>
+  ) : (
+    <>
+      <img
+        ref={target}
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+        alt={data.name}
+        src={data.photo}
+        className="rounded-circle"
+        height={48}
+        width={48}
+      />
+      <Overlay target={target.current} show={show} placement="bottom">
+        {(props) => <Tooltip {...props}>{data.name}</Tooltip>}
+      </Overlay>
     </>
   );
 };

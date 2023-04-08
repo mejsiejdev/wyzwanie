@@ -1,7 +1,7 @@
 import express from "express";
 import { prisma } from "../../lib/db";
 import { hash, compare } from "bcrypt";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -25,11 +25,17 @@ router.post("/signin", async (req, res) => {
       res.status(404).end("No user found with that nickname.");
     } else {
       if (await compare(password, user?.password)) {
-        const token = sign({id: user.id, name: user.name, password: user.password}, process.env.JWT_SECRET!, {expiresIn: '1h'});
+        const token = sign(
+          { id: user.id, name: user.name, password: user.password },
+          process.env.JWT_SECRET!,
+          { expiresIn: "1h" }
+        );
 
         res.json(token).status(201);
-      } else{
-        res.status(401).end('unauthorized login, check your credentials and try again.');
+      } else {
+        res
+          .status(401)
+          .end("unauthorized login, check your credentials and try again.");
       }
     }
   } catch {
@@ -63,7 +69,8 @@ router.post("/", async (req, res) => {
         res.status(500).end("Server error.");
         return;
       }
-    } catch {
+    } catch (error) {
+      console.log(error);
       res
         .status(400)
         .end("Account with specified name already exists in the database.");
@@ -73,6 +80,72 @@ router.post("/", async (req, res) => {
     res.status(500).end("Server error.");
     return;
   }
+});
+
+// Authenticate before doing anything
+router.use("/photo", async (req, res, next) => {
+  if (!req.headers.authorization) {
+    res.status(401).end("Lack of authorization header.");
+  } else {
+    try {
+      const decoded = verify(
+        req.headers.authorization,
+        process.env.JWT_SECRET!
+      );
+      try {
+        const user = await prisma.user.findUnique({
+          where: {
+            // @ts-ignore
+            name: decoded.name,
+          },
+        });
+        if (
+          !user ||
+          // @ts-ignore
+          user.password != decoded.password ||
+          // @ts-ignore
+          user.id != decoded.id
+        ) {
+          res.status(401).end("Falsified token.");
+        } else {
+          res.locals.userId = user.id;
+          next();
+        }
+      } catch {
+        res.status(500).end("Server error.");
+      }
+    } catch {
+      res.status(401).end("Invalid token.");
+    }
+  }
+});
+
+// Profile picture route
+router.patch("/photo", async (req, res) => {
+  const { photo } = req.body;
+
+  await prisma.user.update({
+    where: {
+      id: res.locals.userId,
+    },
+    data: {
+      photo: photo,
+    },
+  });
+  res.status(200).end("Added photo.");
+});
+
+router.get("/photo", async (req, res) => {
+  const data = await prisma.user.findUnique({
+    where: {
+      id: res.locals.userId,
+    },
+    select: {
+      name: true,
+      photo: true,
+    },
+  });
+  res.status(200).json(data);
 });
 
 export default router;

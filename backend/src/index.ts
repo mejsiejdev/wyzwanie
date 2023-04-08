@@ -10,7 +10,7 @@ const port = process.env.PORT;
 import cors from "cors";
 import BodyParser from "body-parser";
 app.use(cors());
-app.use(BodyParser.json());
+app.use(BodyParser.json({ limit: "15mb" }));
 
 // Import routes' routers
 import user from "./routes/user";

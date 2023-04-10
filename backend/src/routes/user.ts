@@ -148,4 +148,14 @@ router.get("/photo", async (req, res) => {
   res.status(200).json(data);
 });
 
+// Load user's profile data
+router.get("/:name", async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      name: req.params.name,
+    },
+  });
+  return res.status(200).json(user);
+});
+
 export default router;

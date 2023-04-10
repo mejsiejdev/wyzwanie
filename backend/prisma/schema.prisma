@@ -15,6 +15,7 @@ model User {
   name       String      @unique
   password   String
   photo      String?
+  points     Int         @default(0)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   challenges Challenge[]
@@ -30,4 +31,5 @@ model Challenge {
   author      User      @relation(fields: [authorId], references: [id])
   authorId    String    @db.ObjectId
   points      Int
+  private     Boolean   @default(false)
 }

@@ -6,12 +6,19 @@ import Register from "./routes/Register";
 import SignIn from "./routes/SignIn";
 import Create from "./routes/Create";
 import Photo from "./routes/Photo";
+import Profile, { loader as ProfileLoader } from "./routes/Profile";
 
 const router = createBrowserRouter([
   // Dashboard
   {
     path: "/",
     element: <Dashboard />,
+  },
+  // User profile
+  {
+    path: "/:name",
+    element: <Profile />,
+    loader: ProfileLoader,
   },
   // Create task
   {

@@ -62,15 +62,15 @@ const Dashboard = () => {
   }, [debouncedFilter]);
 
   return (
-    <>
+    <div className="d-flex flex-column gap-3 w-100">
       <div className="d-flex flex-row align-items-center justify-content-between w-100">
         <h1>Dashboard</h1>
         <UserSection />
       </div>
-      <div className="d-flex flex-column gap-3 w-100">
-        <div className="d-flex flex-row gap-3 w-100 align-items-center justify-content-between">
-          <div className="input-group">
-            <span className="input-group-text" id="basic-addon1">
+      <div className="container-fluid">
+        <div className="row gap-3">
+          <div className="input-group px-0 col">
+            <span className="input-group-text">
               <MdSearch className="fs-4 text-dark" />
             </span>
             <input
@@ -81,7 +81,7 @@ const Dashboard = () => {
               placeholder="Search for a challenge..."
             />
           </div>
-          <Link to={"/create"} className="flex-shrink-0">
+          <Link to={"/create"} className="flex-shrink-0 col col-12 col-sm-auto px-0">
             <Button
               variant={"primary"}
               className="w-100 d-flex flex-row gap-1 align-items-center justify-content-center">
@@ -90,24 +90,24 @@ const Dashboard = () => {
             </Button>
           </Link>
         </div>
-        {loading ? (
-          <p>Loading challenges...</p>
-        ) : challenges?.length !== 0 ? (
-          challenges?.map((challenge, key) => <Challenge key={key} {...challenge} />)
-        ) : (
-          filter == "" && (
-            <Box>
-              <div className="d-flex flex-row align-items-center justify-content-between gap-3">
-                <p className="mb-0">Looks like you don&apos;t have any challenges yet!</p>
-                <Link to={"/create"}>
-                  <Button variant={"primary"}>Create challenge</Button>
-                </Link>
-              </div>
-            </Box>
-          )
-        )}
       </div>
-    </>
+      {loading ? (
+        <p>Loading challenges...</p>
+      ) : challenges?.length !== 0 ? (
+        challenges?.map((challenge, key) => <Challenge key={key} {...challenge} />)
+      ) : (
+        filter == "" && (
+          <Box>
+            <div className="d-flex flex-row align-items-center justify-content-between gap-3">
+              <p className="mb-0">Looks like you don&apos;t have any challenges yet!</p>
+              <Link to={"/create"}>
+                <Button variant={"primary"}>Create challenge</Button>
+              </Link>
+            </div>
+          </Box>
+        )
+      )}
+    </div>
   );
 };
 
@@ -136,7 +136,7 @@ const UserSection = () => {
   return !data ? (
     <p>Loading...</p>
   ) : (
-    <>
+    <Link to={`/${data.name}`}>
       <img
         ref={target}
         onMouseEnter={() => setShow(true)}
@@ -150,7 +150,7 @@ const UserSection = () => {
       <Overlay target={target.current} show={show} placement="bottom">
         {(props) => <Tooltip {...props}>{data.name}</Tooltip>}
       </Overlay>
-    </>
+    </Link>
   );
 };
 

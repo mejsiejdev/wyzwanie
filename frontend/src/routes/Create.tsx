@@ -21,7 +21,6 @@ const Create = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
     console.log(sessionStorage.getItem("JWT"));
     fetch("http://localhost:8000/challenge", {
       method: "post",
@@ -78,17 +77,18 @@ const Create = () => {
                   className="rounded-2 py-1 px-2"
                 />
               </div>
-              
             </div>
             <div className="d-flex flex-column gap-2">
-                <select
-                  className="form-select form-select-lg mb-3"
-                  id={id + '-checker'}
-                  {...register('checker', {required:true})}>
-                  <option selected disabled>values will go here</option>
-                  
-                </select>
-              </div>
+              <select
+                className="form-select form-select-lg mb-3"
+                id={id + "-checker"}
+                {...register("checker", { required: true })}>
+                <option selected disabled>
+                  values will go here
+                </option>
+              </select>
+              <CheckerSelect />
+            </div>
             <div className="d-flex justify-content-end pt-1">
               <Button type={"submit"} variant={"primary"}>
                 Create
@@ -98,6 +98,17 @@ const Create = () => {
         </div>
       </Box>
     </div>
+  );
+};
+
+const CheckerSelect = () => {
+  const getCheckers = async () => {};
+  return (
+    <select className="form-select">
+      <option selected disabled>
+        values will go here
+      </option>
+    </select>
   );
 };
 

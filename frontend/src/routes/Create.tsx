@@ -3,7 +3,8 @@ import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Box from "../components/Box";
 import { useNavigate } from "react-router-dom";
-
+import { MdTextsms, MdDateRange } from "react-icons/md";
+import { AiFillStar, AiOutlineUser } from "react-icons/ai";
 type Inputs = {
   content: string;
   expiresAt: Date;
@@ -43,19 +44,23 @@ const Create = () => {
       style={{ maxWidth: "28rem" }}>
       <Box>
         <div className="d-flex flex-column align-items-center gap-3 w-100">
-          <h1>Create new challenge</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column gap-3 w-100">
+          <p className="fs-1 fw-semibold mb-0">Create a task</p>
+          <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column gap-3 w-100 p-3">
             <div className="d-flex flex-column gap-2">
-              <label htmlFor={id + "-content"}>Content</label>
+              <label htmlFor={id + "-content"} className="form-label gap-1 items-center">
+                <MdTextsms /> Content
+              </label>
               <textarea
                 {...register("content", { required: true })}
                 id={id + "-content"}
-                className="rounded-2 py-1 px-2"
+                className="form-control bg-light rounded-2 py-1 px-2"
               />
             </div>
             <div className="d-flex flex-row gap-2 align-items-center w-100">
-              <div className="d-flex flex-column gap-2 w-100">
-                <label htmlFor={id + "-expiresAt"}>Expiration date</label>
+              <div className="d-flex flex-column gap-2">
+                <label className="form-label gap-1 items-center" htmlFor={id + "-expiresAt"}>
+                  <MdDateRange /> Expiration date
+                </label>
                 <input
                   {...register("expiresAt", { required: true })}
                   id={id + "-expiresAt"}
@@ -63,11 +68,11 @@ const Create = () => {
                   defaultValue={nextDay
                     .toISOString()
                     .slice(0, nextDay.toISOString().lastIndexOf(":"))}
-                  className="rounded-2 py-1 px-2"
+                  className="rounded-2 form-control"
                 />
               </div>
               <div className="d-flex flex-column gap-2">
-                <label htmlFor={id + "-points"}>Points</label>
+                <label className="form-label gap-1 items-center" htmlFor={id + "-points"}><AiFillStar/> Points</label>
                 <input
                   {...register("points", { required: true })}
                   id={id + "-points"}
@@ -75,20 +80,23 @@ const Create = () => {
                   min={0}
                   step={5}
                   max={100}
-                  className="rounded-2 py-1 px-2"
+                  className="rounded-2 form-control"
                 />
               </div>
-              
             </div>
             <div className="d-flex flex-column gap-2">
-                <select
-                  className="form-select form-select-lg mb-3"
-                  id={id + '-checker'}
-                  {...register('checker', {required:true})}>
-                  <option selected disabled>values will go here</option>
-                  
-                </select>
-              </div>
+              <label className="form-label gap-1 items-center" id={id + '-checker'}>
+              <AiOutlineUser /> Checker
+              </label>
+              <select
+                className="form-control mb-3"
+                id={id + "-checker"}
+                {...register("checker", { required: true })}>
+                <option selected disabled>
+                  values will go here
+                </option>
+              </select>
+            </div>
             <div className="d-flex justify-content-end pt-1">
               <Button type={"submit"} variant={"primary"}>
                 Create

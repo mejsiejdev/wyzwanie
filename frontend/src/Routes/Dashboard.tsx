@@ -94,7 +94,9 @@ const Dashboard = () => {
       {loading ? (
         <p>Loading challenges...</p>
       ) : challenges?.length !== 0 ? (
-        challenges?.map((challenge, key) => <Challenge key={key} {...challenge} />)
+        challenges?.map((challenge, key) => (
+          <Challenge key={key} challenge={challenge} onClick={getChallenges} />
+        ))
       ) : (
         filter == "" && (
           <Box>
@@ -154,7 +156,7 @@ const UserSection = () => {
   );
 };
 
-const Challenge = ({ id, content, expiresAt, completedAt }: Challenge) => {
+const Challenge = ({ challenge, onClick }: { challenge: Challenge; onClick: () => void }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const setAsCompleted = async () => {
     setLoading(true);
@@ -166,24 +168,26 @@ const Challenge = ({ id, content, expiresAt, completedAt }: Challenge) => {
         Authorization: `${sessionStorage.getItem("JWT")}`,
       },
       body: JSON.stringify({
-        id: id,
+        id: challenge.id,
       }),
     }).then((response) => {
+      setLoading(false);
       if (response.ok) {
         console.log(response.statusText);
+        onClick();
       }
     });
-    setLoading(false);
   };
   return (
     <Box>
       <div className="d-flex flex-row align-items-center justify-content-between gap-3">
-        <h3>{content}</h3>
+        <h3>{challenge.content}</h3>
         <Button
-          disabled={loading}
+          // @ts-ignore
+          disabled={loading || challenge.completedAt}
           title="Mark as completed"
-          onClick={setAsCompleted}
-          variant={completedAt ? "success" : "unstyled"}>
+          onClick={!challenge.completedAt ? setAsCompleted : undefined}
+          variant={challenge.completedAt ? "success" : "unstyled"}>
           {!loading ? (
             <MdCheck style={{ fontSize: "2rem", flex: "none" }} />
           ) : (
@@ -196,7 +200,8 @@ const Challenge = ({ id, content, expiresAt, completedAt }: Challenge) => {
           Must be completed{" "}
           {new Intl.RelativeTimeFormat("en", { style: "long" }).format(
             Math.floor(
-              (new Date(expiresAt).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
+              (new Date(challenge.expiresAt).getTime() - new Date().getTime()) /
+                (1000 * 60 * 60 * 24),
             ),
             "day",
           )}

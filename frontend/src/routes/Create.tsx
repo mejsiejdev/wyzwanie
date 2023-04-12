@@ -8,6 +8,7 @@ type Inputs = {
   content: string;
   expiresAt: Date;
   points: number;
+  checker: string;
 };
 
 const Create = () => {
@@ -77,7 +78,17 @@ const Create = () => {
                   className="rounded-2 py-1 px-2"
                 />
               </div>
+              
             </div>
+            <div className="d-flex flex-column gap-2">
+                <select
+                  className="form-select form-select-lg mb-3"
+                  id={id + '-checker'}
+                  {...register('checker', {required:true})}>
+                  <option selected disabled>values will go here</option>
+                  
+                </select>
+              </div>
             <div className="d-flex justify-content-end pt-1">
               <Button type={"submit"} variant={"primary"}>
                 Create

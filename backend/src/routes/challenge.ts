@@ -74,22 +74,50 @@ router.post("/", async (req, res) => {
 router.patch("/", async (req, res) => {
   // Extract challenge id
   const { id } = req.body;
-  // Update task
+
   try {
-    await prisma.challenge.update({
+    // Check if the task has been already completed
+    const challenge = await prisma.challenge.findUnique({
       where: {
         id: id,
       },
-      data: {
-        completedAt: new Date(),
+      select: {
+        completedAt: true,
       },
     });
+    if (challenge?.completedAt === null) {
+      // Set task as complete, and get it's amount of points
+      const { points } = await prisma.challenge.update({
+        where: {
+          id: id,
+        },
+        data: {
+          completedAt: new Date(),
+        },
+        select: {
+          points: true,
+          completedAt: true,
+        },
+      });
+      await prisma.user.update({
+        where: {
+          id: res.locals.userId,
+        },
+        data: {
+          points: {
+            increment: points,
+          },
+        },
+      });
+      // Return successful response if everything goes fine
+      res.status(200).end("Successfully set challenge as complete.");
+    } else {
+      res.status(400).end("Challenge is already set as completed.");
+    }
   } catch {
     // Return server error if something goes wrong
     res.status(500).end("Server error.");
   }
-  // Return successful response if everything goes fine
-  res.status(200).end("Successfully set challenge as complete.");
 });
 
 export default router;

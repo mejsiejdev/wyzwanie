@@ -132,7 +132,7 @@ const UserSection = () => {
         }
       })
       .then((data) => setData(data));
-  });
+  }, []);
   return !data ? (
     <p>Loading...</p>
   ) : (

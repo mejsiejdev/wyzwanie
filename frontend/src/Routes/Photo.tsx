@@ -89,7 +89,9 @@ const Photo = () => {
           )}
         </div>
         {!preview && (
-          <a href="/" className="text-center fw-semibold text-secondary text-decoration-none">
+          <a
+            href="/"
+            className="btn btn-light text-center fw-semibold text-secondary text-decoration-none">
             Skip
           </a>
         )}

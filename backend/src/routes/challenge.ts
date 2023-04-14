@@ -59,13 +59,14 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { content, expiresAt, points } = req.body;
+  const { content, expiresAt, points, checker } = req.body;
   await prisma.challenge.create({
     data: {
       content: content,
       expiresAt: new Date(expiresAt),
       points: parseInt(points),
       authorId: res.locals.userId,
+      checkerName: checker,
     },
   });
   res.status(201).end("Created new Challenge.");

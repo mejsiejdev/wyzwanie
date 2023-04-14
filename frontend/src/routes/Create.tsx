@@ -2,7 +2,7 @@ import { useId } from "react";
 import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Box from "../components/Box";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 type Inputs = {
   content: string;
@@ -11,8 +11,29 @@ type Inputs = {
   checker: string;
 };
 
+export const loader = async () => {
+  try {
+    const response = await fetch("http://localhost:8000/user/checker", {
+      mode: "cors",
+      headers: {
+        Authorization: `${sessionStorage.getItem("JWT")}`,
+      },
+    });
+    if (!response.ok) throw new Error();
+
+    const data = await response.json();
+    return data;
+  } catch {
+    throw new Response(null, {
+      status: 500,
+      statusText: "Internal Server Error",
+    });
+  }
+};
+
 const Create = () => {
   const navigate = useNavigate();
+  const checkers = useLoaderData() as { name: string; photo: string }[];
   const id = useId();
   const {
     register,
@@ -21,6 +42,7 @@ const Create = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log("Data: ", data);
     console.log(sessionStorage.getItem("JWT"));
     fetch("http://localhost:8000/challenge", {
       method: "post",
@@ -79,15 +101,18 @@ const Create = () => {
               </div>
             </div>
             <div className="d-flex flex-column gap-2">
-              <select
-                className="form-select form-select-lg mb-3"
-                id={id + "-checker"}
-                {...register("checker", { required: true })}>
-                <option selected disabled>
-                  values will go here
+              <label htmlFor={id + "-checker"}>Checker</label>
+              <select {...register("checker", { required: false })} className="form-select">
+                <option disabled selected value={undefined}>
+                  Select a checker
                 </option>
+                {checkers &&
+                  checkers.map(({ name }, key) => (
+                    <option value={name} key={key}>
+                      {name}
+                    </option>
+                  ))}
               </select>
-              <CheckerSelect />
             </div>
             <div className="d-flex justify-content-end pt-1">
               <Button type={"submit"} variant={"primary"}>
@@ -98,17 +123,6 @@ const Create = () => {
         </div>
       </Box>
     </div>
-  );
-};
-
-const CheckerSelect = () => {
-  const getCheckers = async () => {};
-  return (
-    <select className="form-select">
-      <option selected disabled>
-        values will go here
-      </option>
-    </select>
   );
 };
 

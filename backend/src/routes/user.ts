@@ -83,7 +83,7 @@ router.post("/", async (req, res) => {
 });
 
 // Authenticate before doing anything
-router.use("/photo", async (req, res, next) => {
+router.use(["/photo", "/checker"], async (req, res, next) => {
   if (!req.headers.authorization) {
     res.status(401).end("Lack of authorization header.");
   } else {
@@ -148,11 +148,31 @@ router.get("/photo", async (req, res) => {
   res.status(200).json(data);
 });
 
+// Load user's checkers
+router.get("/checker", async (req, res) => {
+  const { id } = req.body;
+  console.log("Id: ", id);
+  console.log("Res locals: ", res.locals);
+  // TODO: Only the friend of the user can be a checker
+  const checkers = await prisma.user.findMany({
+    where: {
+      id: {
+        not: id ? id : res.locals.userId,
+      },
+    },
+  });
+  return res.status(200).json(checkers);
+});
+
 // Load user's profile data
 router.get("/:name", async (req, res) => {
   const user = await prisma.user.findUnique({
     where: {
       name: req.params.name,
+    },
+    select: {
+      name: true,
+      photo: true,
     },
   });
   return res.status(200).json(user);

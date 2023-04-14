@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./routes/Dashboard";
 import Register from "./routes/Register";
 import SignIn from "./routes/SignIn";
-import Create from "./routes/Create";
+import Create, { loader as CreateLoader } from "./routes/Create";
 import Photo from "./routes/Photo";
 import Profile, { loader as ProfileLoader } from "./routes/Profile";
 
@@ -24,6 +24,7 @@ const router = createBrowserRouter([
   {
     path: "/create",
     element: <Create />,
+    loader: CreateLoader,
   },
   // Register
   {

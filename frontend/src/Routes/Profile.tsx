@@ -42,7 +42,7 @@ const Profile = () => {
             src={user.photo}
             alt={user.name}
             className="rounded-circle object-fit-cover"
-            style={{ maxWidth: "12rem", width:"10rem", height:'10rem' }}
+            style={{ maxWidth: "12rem", width: "10rem", height: "10rem" }}
           />
         ) : (
           <div
@@ -55,9 +55,9 @@ const Profile = () => {
         <div className="d-flex flex-column w-100">
           <h1>{user.name}</h1>
           <h5>{`${user.points} points`}</h5>
-          <h6>{`Member since ${new Intl.DateTimeFormat("en-GB").format(
-            new Date(user.createdAt),
-          )}`}</h6>
+          <h6>
+            {`Member since ${new Intl.DateTimeFormat("en-GB").format(new Date(user.createdAt))}`}
+          </h6>
         </div>
       </div>
     </div>

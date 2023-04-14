@@ -173,6 +173,8 @@ router.get("/:name", async (req, res) => {
     select: {
       name: true,
       photo: true,
+      points: true,
+      createdAt: true,
     },
   });
   return res.status(200).json(user);

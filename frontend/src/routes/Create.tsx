@@ -3,8 +3,8 @@ import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Box from "../components/Box";
 import { useNavigate } from "react-router-dom";
-import { MdTextsms, MdDateRange } from "react-icons/md";
-import { AiFillStar, AiOutlineUser } from "react-icons/ai";
+import { MdTextsms, MdDateRange, MdPersonSearch, MdStarRate } from "react-icons/md";
+
 type Inputs = {
   content: string;
   expiresAt: Date;
@@ -57,7 +57,7 @@ const Create = () => {
               />
             </div>
             <div className="d-flex flex-row gap-2 align-items-center w-100">
-              <div className="d-flex flex-column gap-2">
+              <div className="d-flex flex-column gap-2 w-50">
                 <label className="form-label gap-1 items-center" htmlFor={id + "-expiresAt"}>
                   <MdDateRange /> Expiration date
                 </label>
@@ -71,8 +71,8 @@ const Create = () => {
                   className="rounded-2 form-control"
                 />
               </div>
-              <div className="d-flex flex-column gap-2">
-                <label className="form-label gap-1 items-center" htmlFor={id + "-points"}><AiFillStar/> Points</label>
+              <div className="d-flex flex-column gap-2 w-50">
+                <label className="form-label gap-1 items-center" htmlFor={id + "-points"}><MdStarRate/> Points</label>
                 <input
                   {...register("points", { required: true })}
                   id={id + "-points"}
@@ -86,7 +86,7 @@ const Create = () => {
             </div>
             <div className="d-flex flex-column gap-2">
               <label className="form-label gap-1 items-center" id={id + '-checker'}>
-              <AiOutlineUser /> Checker
+              <MdPersonSearch /> Checker
               </label>
               <select
                 className="form-control mb-3"

@@ -1,4 +1,4 @@
-import { MdArrowBackIosNew } from "react-icons/md";
+import { MdArrowBackIosNew, MdPerson } from "react-icons/md";
 import { Link, useLoaderData } from "react-router-dom";
 
 export const loader = async ({ params }: { params: { name: string } }) => {
@@ -37,14 +37,21 @@ const Profile = () => {
         <MdArrowBackIosNew className="fs-3 my-3" />
       </Link>
       <div className="d-flex flex-column flex-sm-row gap-4 gap-sm-5 align-items-center w-100">
-        {user.photo !== null && (
+        {user.photo != null ? (
           <img
             src={user.photo}
             alt={user.name}
-            className="rounded-circle w-100"
-            style={{ maxWidth: "12rem" }}
+            className="rounded-circle object-fit-cover"
+            style={{ maxWidth: "12rem", width:"10rem", height:'10rem' }}
           />
+        ) : (
+          <div
+            className="bg-light rounded-circle align-self-center d-flex align-items-center p-3"
+            style={{ width: "10rem", height: "10rem" }}>
+            <MdPerson className="text-secondary" style={{ width: "10rem", height: "10rem" }} />
+          </div>
         )}
+
         <div className="d-flex flex-column w-100">
           <h1>{user.name}</h1>
           <h5>{`${user.points} points`}</h5>

@@ -52,7 +52,7 @@ const Photo = () => {
             alt="Image preview"
             width={256}
             height={256}
-            className="rounded-circle align-self-center"
+            className="rounded-circle align-self-center object-fit-cover"
           />
         ) : (
           <div

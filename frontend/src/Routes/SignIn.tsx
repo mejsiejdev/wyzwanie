@@ -1,6 +1,5 @@
 import { useId, useState } from "react";
-import { AiOutlineUser } from "react-icons/ai";
-import { RiLockPasswordFill } from "react-icons/ri";
+import { MdPerson2, MdPassword } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Box from "../components/Box/Box";
@@ -59,7 +58,7 @@ export default function SignIn() {
         <form className="p-3" method="POST" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <label className="form-label gap-1 items-center" htmlFor={id + "-name"}>
-              <AiOutlineUser /> Username
+              <MdPerson2 /> Username
             </label>
             <input
               {...register("name", { required: true })}
@@ -73,7 +72,7 @@ export default function SignIn() {
           </div>
           <div className="mb-3">
             <label className="form-label gap-1 items-center" htmlFor={id + "-password"}>
-              <RiLockPasswordFill /> Password
+              <MdPassword /> Password
             </label>
             <input
               {...register("password", { required: true })}

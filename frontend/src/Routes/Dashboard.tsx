@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MdAccountCircle, MdAdd, MdCheck, MdRefresh, MdSearch } from "react-icons/md";
+import { MdAccountCircle, MdAdd, MdCheck, MdPerson, MdRefresh, MdSearch } from "react-icons/md";
 import Box from "../components/Box";
 import { Button, Overlay, Tooltip } from "react-bootstrap";
 import useDebounce from "../hooks/useDebounce";
@@ -139,16 +139,28 @@ const UserSection = () => {
     <p>Loading...</p>
   ) : (
     <Link to={`/${data.name}`}>
-      <img
-        ref={target}
-        onMouseEnter={() => setShow(true)}
-        onMouseLeave={() => setShow(false)}
-        alt={data.name}
-        src={data.photo}
-        className="rounded-circle"
-        height={48}
-        width={48}
-      />
+      {data.photo != null ? (
+        <img
+          ref={target}
+          onMouseEnter={() => setShow(true)}
+          onMouseLeave={() => setShow(false)}
+          alt={data.name}
+          src={data.photo}
+          className="rounded-circle object-fit-cover"
+          height={48}
+          width={48}
+        />
+      ) : (
+        <div
+          ref={target}
+          onMouseEnter={() => setShow(true)}
+          onMouseLeave={() => setShow(false)}
+          className="bg-light rounded-circle align-self-center d-flex align-items-center"
+          style={{ width: "48", height: "48" }}>
+          <MdPerson className="text-secondary" style={{ width: "42", height: "42" }} />
+        </div>
+      )}
+
       <Overlay target={target.current} show={show} placement="bottom">
         {(props) => <Tooltip {...props}>{data.name}</Tooltip>}
       </Overlay>

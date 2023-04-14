@@ -2,8 +2,14 @@ import { useId } from "react";
 import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Box from "../components/Box";
-import { useLoaderData, useNavigate } from "react-router-dom";
-import { MdDateRange, MdPersonSearch, MdStarRate, MdTextsms } from "react-icons/md";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import {
+  MdArrowBackIosNew,
+  MdDateRange,
+  MdPersonSearch,
+  MdStarRate,
+  MdTextsms,
+} from "react-icons/md";
 
 type Inputs = {
   content: string;
@@ -63,7 +69,12 @@ const Create = () => {
       className="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
       style={{ maxWidth: "28rem" }}>
       <div className="d-flex flex-column align-items-start gap-3 w-100">
-        <h1>Create challenge</h1>
+        <div className="d-flex gap-3 align-items-center">
+          <Link to="/" className="text-black">
+            <MdArrowBackIosNew className="fs-3 mb-1" />
+          </Link>
+          <h1>Create challenge</h1>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column gap-3 w-100">
           <div className="d-flex flex-column">
             <label htmlFor={id + "-content"} className="form-label d-flex gap-1 align-items-center">

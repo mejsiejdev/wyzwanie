@@ -44,8 +44,10 @@ const Photo = () => {
       className="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
       style={{ maxWidth: "28rem" }}>
       <div className="d-flex flex-column gap-3 w-100">
-        <p className="fs-1 fw-semibold mb-0">You are in! Add your profile photo!</p>
-        <p>It will make it easier for your friends to recognize you.</p>
+        <p className="fs-1 fw-semibold mb-0">
+          {!preview ? "You are in! Add your profile photo!" : "You are now ready to go!"}
+        </p>
+        {!preview && <p>It will make it easier for your friends to recognize you.</p>}
         {preview ? (
           <img
             src={preview}

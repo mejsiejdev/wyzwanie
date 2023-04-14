@@ -28,6 +28,8 @@ model Challenge {
   updatedAt   DateTime  @updatedAt
   expiresAt   DateTime
   completedAt DateTime?
+  checkedAt   DateTime?
+  checkerName String?
   author      User      @relation(fields: [authorId], references: [id])
   authorId    String    @db.ObjectId
   points      Int

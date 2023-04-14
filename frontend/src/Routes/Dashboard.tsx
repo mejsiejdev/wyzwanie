@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MdAccountCircle, MdAdd, MdCheck, MdPerson, MdRefresh, MdSearch } from "react-icons/md";
+import {
+  MdAdd,
+  MdCheck,
+  MdOutlineNotifications,
+  MdPerson,
+  MdRefresh,
+  MdSearch,
+} from "react-icons/md";
 import Box from "../components/Box";
 import { Button, Overlay, Tooltip } from "react-bootstrap";
 import useDebounce from "../hooks/useDebounce";
@@ -65,7 +72,10 @@ const Dashboard = () => {
     <div className="d-flex flex-column gap-3 w-100">
       <div className="d-flex flex-row align-items-center justify-content-between w-100">
         <h1>Dashboard</h1>
-        <UserSection />
+        <div className="d-flex align-items-center gap-3">
+          <MdOutlineNotifications className="fs-3" />
+          <UserSection />
+        </div>
       </div>
       <div className="container-fluid">
         <div className="row gap-3">

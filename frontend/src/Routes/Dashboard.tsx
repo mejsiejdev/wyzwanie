@@ -165,6 +165,12 @@ const Notifications = () => {
         title={show ? "Show notifications" : "Hide notifications"}>
         <MdOutlineNotifications className={`fs-3 ${show ? "text-primary" : "text-black"}`} />
       </Button>
+      {notifications && notifications.length > 0 && (
+        <span
+          className="bg-danger rounded-circle"
+          style={{ width: "0.75rem", height: "0.75rem" }}
+        />
+      )}
       <Overlay show={show} target={target} placement="bottom" container={ref} containerPadding={16}>
         <Popover id="popover-contained">
           <Popover.Header as="h3">Notifications</Popover.Header>

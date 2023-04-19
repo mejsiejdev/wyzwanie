@@ -4,6 +4,7 @@ import { MdAccountCircle, MdAdd, MdCheck, MdPerson, MdRefresh, MdSearch } from "
 import Box from "../components/Box";
 import { Button, Overlay, Tooltip } from "react-bootstrap";
 import useDebounce from "../hooks/useDebounce";
+import moment from "moment";
 
 type Challenge = {
   id: string;
@@ -208,16 +209,17 @@ const Challenge = ({ challenge, onClick }: { challenge: Challenge; onClick: () =
         </Button>
       </div>
       <div>
-        <p className="mb-0">
-          Must be completed{" "}
-          {new Intl.RelativeTimeFormat("en", { style: "long" }).format(
-            Math.floor(
-              (new Date(challenge.expiresAt).getTime() - new Date().getTime()) /
-                (1000 * 60 * 60 * 24),
-            ),
-            "day",
-          )}
+        {challenge.completedAt != null ? (
+          <p className="mb-0">
+          completed at <span className="fw-bold">{moment(challenge.createdAt).format("MMM Do, h:mm a")}</span>
         </p>
+          
+        ) : (
+          <p className="mb-0">
+            Must be completed by{" "}
+            <span className="fw-bold">{moment(challenge.expiresAt).format("MMM Do, h:mm a")}</span>
+          </p>
+        )}
       </div>
     </Box>
   );

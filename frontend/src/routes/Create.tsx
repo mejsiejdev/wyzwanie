@@ -46,6 +46,8 @@ const Create = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
+    reset,
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -60,14 +62,17 @@ const Create = () => {
       body: JSON.stringify(data),
     }).then((response) => {
       if (response.ok) navigate("/");
-      // TODO: Handle the case when the challenge creation fails.
+      else{
+        setError('content', {type:'value', message:'Internal server error.'});
+        reset({}, {keepErrors:true, keepValues:true});
+      }
     });
   };
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   
-  
+
   return (
     <div
       className="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
@@ -89,6 +94,7 @@ const Create = () => {
               id={id + "-content"}
               className="form-control bg-light rounded-2 py-1 px-2"
             />
+            {errors.content && <p className="text-danger mb-2">{errors.content.message}</p>}
           </div>
           <div className="d-flex flex-row gap-3 align-items-center w-100">
             <div className="d-flex flex-column w-100">

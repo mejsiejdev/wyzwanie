@@ -134,6 +134,13 @@ const Notifications = () => {
   const handleClick = (event: any) => {
     setShow(!show);
     setTarget(event.target);
+    if (notifications) {
+      localStorage.setItem(
+        "notifications",
+        JSON.stringify(notifications.map(({ author }) => author.name)),
+      );
+    }
+    setLoading(loading);
   };
 
   const getNotifications = async () => {
@@ -149,7 +156,9 @@ const Notifications = () => {
           return res.json();
         }
       })
-      .then((data) => setNotifications(data));
+      .then((data) => {
+        setNotifications(data);
+      });
     setLoading(false);
   };
 
@@ -158,26 +167,38 @@ const Notifications = () => {
   }, []);
 
   return (
-    <div ref={ref} className="d-flex flex-column align-items-center">
+    <div className="d-flex flex-column align-items-center">
       <Button
+        ref={ref}
         variant="unstyled"
+        className="d-flex justify-content-end"
         onClick={handleClick}
         title={show ? "Show notifications" : "Hide notifications"}>
         <MdOutlineNotifications className={`fs-3 ${show ? "text-primary" : "text-black"}`} />
+        {notifications &&
+          notifications.length > 0 &&
+          // @ts-ignore
+          JSON.parse(localStorage.getItem("notifications"))?.length !== notifications.length && (
+            <>
+              <span
+                className="position-absolute bg-danger rounded-circle animate-ping"
+                style={{ width: "0.75rem", height: "0.75rem" }}
+              />
+              <span
+                className="position-absolute bg-danger rounded-circle"
+                style={{ width: "0.75rem", height: "0.75rem" }}
+              />
+            </>
+          )}
       </Button>
-      {notifications && notifications.length > 0 && (
-        <span
-          className="bg-danger rounded-circle"
-          style={{ width: "0.75rem", height: "0.75rem" }}
-        />
-      )}
       <Overlay show={show} target={target} placement="bottom" container={ref} containerPadding={16}>
         <Popover id="popover-contained">
           <Popover.Header as="h3">Notifications</Popover.Header>
           <Popover.Body>
             {notifications &&
-              notifications.map(({ author, id }) => (
+              notifications.map(({ author, id }, key) => (
                 <Link
+                  key={key}
                   to={`/check/${id}`}
                   className="d-flex gap-3 align-items-center text-decoration-none text-black">
                   <img src={author.photo} alt={author.name} className="rounded-circle" width="48" />

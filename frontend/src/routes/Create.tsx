@@ -63,7 +63,11 @@ const Create = () => {
       // TODO: Handle the case when the challenge creation fails.
     });
   };
-  const nextDay = new Date();
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  
   return (
     <div
       className="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
@@ -98,9 +102,9 @@ const Create = () => {
                 {...register("expiresAt", { required: true })}
                 id={id + "-expiresAt"}
                 type={"datetime-local"}
-                defaultValue={nextDay
+                defaultValue={tomorrow
                   .toISOString()
-                  .slice(0, nextDay.toISOString().lastIndexOf(":"))}
+                  .slice(0, tomorrow.toISOString().lastIndexOf(":"))}
                 className="form-control bg-light rounded-2 py-1 px-2"
               />
             </div>

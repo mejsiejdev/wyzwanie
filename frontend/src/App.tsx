@@ -7,12 +7,19 @@ import SignIn from "./routes/SignIn";
 import Create, { loader as CreateLoader } from "./routes/Create";
 import Photo from "./routes/Photo";
 import Profile, { loader as ProfileLoader } from "./routes/Profile";
+import Check from "./routes/Check";
 
 const router = createBrowserRouter([
   // Dashboard
   {
     path: "/",
     element: <Dashboard />,
+    children: [
+      {
+        path: "/check/:id",
+        element: <Check />,
+      },
+    ],
   },
   // User profile
   {

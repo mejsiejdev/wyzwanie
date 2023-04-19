@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import {
   MdAdd,
   MdCheck,
@@ -69,57 +69,60 @@ const Dashboard = () => {
   }, [debouncedFilter]);
 
   return (
-    <div className="d-flex flex-column gap-3 w-100">
-      <div className="d-flex flex-row align-items-center justify-content-between w-100">
-        <h1>Dashboard</h1>
-        <div className="d-flex align-items-center gap-3">
-          <Notifications />
-          <UserSection />
-        </div>
-      </div>
-      <div className="container-fluid">
-        <div className="row gap-3">
-          <div className="input-group px-0 col">
-            <span className="input-group-text">
-              <MdSearch className="fs-4 text-dark" />
-            </span>
-            <input
-              title="Search for a challenge..."
-              type="text"
-              onChange={(e) => setFilter(e.target.value)}
-              className="form-control"
-              placeholder="Search for a challenge..."
-            />
+    <>
+      <div className="d-flex flex-column gap-3 w-100">
+        <div className="d-flex flex-row align-items-center justify-content-between w-100">
+          <h1>Dashboard</h1>
+          <div className="d-flex align-items-center gap-3">
+            <Notifications />
+            <UserSection />
           </div>
-          <Link to={"/create"} className="flex-shrink-0 col col-12 col-sm-auto px-0">
-            <Button
-              variant={"primary"}
-              className="w-100 d-flex flex-row gap-1 align-items-center justify-content-center">
-              <MdAdd className="fs-5" />
-              <p className="mb-0">Create challenge</p>
-            </Button>
-          </Link>
         </div>
-      </div>
-      {loading ? (
-        <p>Loading challenges...</p>
-      ) : challenges?.length !== 0 ? (
-        challenges?.map((challenge, key) => (
-          <Challenge key={key} challenge={challenge} onClick={getChallenges} />
-        ))
-      ) : (
-        filter == "" && (
-          <Box>
-            <div className="d-flex flex-row align-items-center justify-content-between gap-3">
-              <p className="mb-0">Looks like you don&apos;t have any challenges yet!</p>
-              <Link to={"/create"}>
-                <Button variant={"primary"}>Create challenge</Button>
-              </Link>
+        <div className="container-fluid">
+          <div className="row gap-3">
+            <div className="input-group px-0 col">
+              <span className="input-group-text">
+                <MdSearch className="fs-4 text-dark" />
+              </span>
+              <input
+                title="Search for a challenge..."
+                type="text"
+                onChange={(e) => setFilter(e.target.value)}
+                className="form-control"
+                placeholder="Search for a challenge..."
+              />
             </div>
-          </Box>
-        )
-      )}
-    </div>
+            <Link to={"/create"} className="flex-shrink-0 col col-12 col-sm-auto px-0">
+              <Button
+                variant={"primary"}
+                className="w-100 d-flex flex-row gap-1 align-items-center justify-content-center">
+                <MdAdd className="fs-5" />
+                <p className="mb-0">Create challenge</p>
+              </Button>
+            </Link>
+          </div>
+        </div>
+        {loading ? (
+          <p>Loading challenges...</p>
+        ) : challenges?.length !== 0 ? (
+          challenges?.map((challenge, key) => (
+            <Challenge key={key} challenge={challenge} onClick={getChallenges} />
+          ))
+        ) : (
+          filter == "" && (
+            <Box>
+              <div className="d-flex flex-row align-items-center justify-content-between gap-3">
+                <p className="mb-0">Looks like you don&apos;t have any challenges yet!</p>
+                <Link to={"/create"}>
+                  <Button variant={"primary"}>Create challenge</Button>
+                </Link>
+              </div>
+            </Box>
+          )
+        )}
+      </div>
+      <Outlet />
+    </>
   );
 };
 
@@ -194,13 +197,13 @@ const Notifications = () => {
       <Overlay show={show} target={target} placement="bottom" container={ref} containerPadding={16}>
         <Popover id="popover-contained">
           <Popover.Header as="h3">Notifications</Popover.Header>
-          <Popover.Body>
+          <Popover.Body className="d-flex flex-column gap-3">
             {notifications &&
               notifications.map(({ author, id }, key) => (
                 <Link
                   key={key}
                   to={`/check/${id}`}
-                  className="d-flex gap-3 align-items-center text-decoration-none text-black">
+                  className="d-flex gap-3 align-items-center text-decoration-none text-black hover:">
                   <img src={author.photo} alt={author.name} className="rounded-circle" width="48" />
                   <div>
                     <strong>{author.name}</strong> wants you to approve their challenge.

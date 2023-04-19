@@ -83,7 +83,7 @@ router.post("/", async (req, res) => {
 });
 
 // Authenticate before doing anything
-router.use(["/photo", "/checker"], async (req, res, next) => {
+router.use(["/photo", "/checker", "notifications"], async (req, res, next) => {
   if (!req.headers.authorization) {
     res.status(401).end("Lack of authorization header.");
   } else {
@@ -109,6 +109,7 @@ router.use(["/photo", "/checker"], async (req, res, next) => {
           res.status(401).end("Falsified token.");
         } else {
           res.locals.userId = user.id;
+          res.locals.username = user.name;
           next();
         }
       } catch {
@@ -118,6 +119,25 @@ router.use(["/photo", "/checker"], async (req, res, next) => {
       res.status(401).end("Invalid token.");
     }
   }
+});
+
+// User notifications
+router.get("/notifications", async (req, res) => {
+  const notifications = await prisma.challenge.findMany({
+    where: {
+      checkerName: res.locals.username,
+    },
+    select: {
+      author: {
+        select: {
+          name: true,
+          photo: true,
+        },
+      },
+      id: true,
+    }
+  });
+  res.status(200).json(notifications);
 });
 
 // Profile picture route

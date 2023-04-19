@@ -1,8 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MdAccountCircle, MdAdd, MdCheck, MdPerson, MdRefresh, MdSearch } from "react-icons/md";
+import {
+  MdAdd,
+  MdCheck,
+  MdOutlineNotifications,
+  MdPerson,
+  MdRefresh,
+  MdSearch,
+} from "react-icons/md";
 import Box from "../components/Box";
-import { Button, Overlay, Tooltip } from "react-bootstrap";
+import { Button, Overlay, Popover, Tooltip } from "react-bootstrap";
 import useDebounce from "../hooks/useDebounce";
 
 type Challenge = {
@@ -65,7 +72,10 @@ const Dashboard = () => {
     <div className="d-flex flex-column gap-3 w-100">
       <div className="d-flex flex-row align-items-center justify-content-between w-100">
         <h1>Dashboard</h1>
-        <UserSection />
+        <div className="d-flex align-items-center gap-3">
+          <Notifications />
+          <UserSection />
+        </div>
       </div>
       <div className="container-fluid">
         <div className="row gap-3">
@@ -109,6 +119,97 @@ const Dashboard = () => {
           </Box>
         )
       )}
+    </div>
+  );
+};
+
+const Notifications = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [notifications, setNotifications] =
+    useState<{ author: { name: string; photo: string }; id: string }[]>();
+  const [show, setShow] = useState(false);
+  const [target, setTarget] = useState(null);
+  const ref = useRef(null);
+
+  const handleClick = (event: any) => {
+    setShow(!show);
+    setTarget(event.target);
+    if (notifications) {
+      localStorage.setItem(
+        "notifications",
+        JSON.stringify(notifications.map(({ author }) => author.name)),
+      );
+    }
+    setLoading(loading);
+  };
+
+  const getNotifications = async () => {
+    setLoading(true);
+    await fetch("http://localhost:8000/user/notifications", {
+      mode: "cors",
+      headers: {
+        Authorization: `${sessionStorage.getItem("JWT")}`,
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        setNotifications(data);
+      });
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getNotifications();
+  }, []);
+
+  return (
+    <div className="d-flex flex-column align-items-center">
+      <Button
+        ref={ref}
+        variant="unstyled"
+        className="d-flex justify-content-end"
+        onClick={handleClick}
+        title={show ? "Show notifications" : "Hide notifications"}>
+        <MdOutlineNotifications className={`fs-3 ${show ? "text-primary" : "text-black"}`} />
+        {notifications &&
+          notifications.length > 0 &&
+          // @ts-ignore
+          JSON.parse(localStorage.getItem("notifications"))?.length !== notifications.length && (
+            <>
+              <span
+                className="position-absolute bg-danger rounded-circle animate-ping"
+                style={{ width: "0.75rem", height: "0.75rem" }}
+              />
+              <span
+                className="position-absolute bg-danger rounded-circle"
+                style={{ width: "0.75rem", height: "0.75rem" }}
+              />
+            </>
+          )}
+      </Button>
+      <Overlay show={show} target={target} placement="bottom" container={ref} containerPadding={16}>
+        <Popover id="popover-contained">
+          <Popover.Header as="h3">Notifications</Popover.Header>
+          <Popover.Body>
+            {notifications &&
+              notifications.map(({ author, id }, key) => (
+                <Link
+                  key={key}
+                  to={`/check/${id}`}
+                  className="d-flex gap-3 align-items-center text-decoration-none text-black">
+                  <img src={author.photo} alt={author.name} className="rounded-circle" width="48" />
+                  <div>
+                    <strong>{author.name}</strong> wants you to approve their challenge.
+                  </div>
+                </Link>
+              ))}
+          </Popover.Body>
+        </Popover>
+      </Overlay>
     </div>
   );
 };

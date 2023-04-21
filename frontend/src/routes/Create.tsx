@@ -13,7 +13,7 @@ import {
 
 type Inputs = {
   content: string;
-  expiresAt: Date;
+  expiresAt: number;
   points: number;
   checker: string;
 };
@@ -51,7 +51,10 @@ const Create = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(sessionStorage.getItem("JWT"));
+    // Get current date
+    const date = new Date();
+    date.setDate(date.getDate() + parseInt(data.expiresAt.toString()));
+
     fetch("http://localhost:8000/challenge", {
       method: "post",
       mode: "cors",
@@ -59,7 +62,12 @@ const Create = () => {
         "Content-Type": "application/json",
         Authorization: `${sessionStorage.getItem("JWT")}`,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        content: data.content,
+        expiresAt: date,
+        points: data.points,
+        checker: data.checker
+      }),
     }).then((response) => {
       if (response.ok) navigate("/");
       else {
@@ -68,9 +76,23 @@ const Create = () => {
       }
     });
   };
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  // const today = new Date();
+  // const tommorow = new Date();
+  // tommorow.setDate(today.getDate() + 1);
+
+  // const inaweek = new Date();
+  // inaweek.setDate(today.getDate() + 7);
+
+  // const inamonth = new Date();
+  // inamonth.setMonth(today.getMonth() + 1);
+
+  // const insixmonths = new Date(); 
+  // insixmonths.setMonth(today.getMonth() + 6);
+
+  // const inayear = new Date();
+  // inayear.setFullYear(today.getFullYear() + 1);
+
+
 
   return (
     <div
@@ -114,25 +136,18 @@ const Create = () => {
                 className="form-control bg-light rounded-2 py-1 px-2"
               /> */}
 
-              <select {...register("expiresAt", { required: true })} id={id + "-expiresAt"} className="form-select bg-light rounded-2 py-1 px-2">
+              <select
+                {...register("expiresAt", { required: true })}
+                id={id + "-expiresAt"}
+                className="form-select bg-light rounded-2 py-1 px-2">
                 <option selected disabled value={undefined}>
                   Pick a due date
                 </option>
-                <option value={1}>
-                  A day from now
-                </option>
-                <option value={7}>
-                  A week from now
-                </option>
-                <option value={31}>
-                  A month from now
-                </option>
-                <option value={182}>
-                  6 months from now
-                </option>
-                <option value={365}>
-                  A year from now
-                </option>
+                <option value={1}>A day from now</option>
+                <option value={7}>A week from now</option>
+                <option value={31}>A month from now</option>
+                <option value={182}>6 months from now</option>
+                <option value={365}>A year from now</option>
               </select>
             </div>
             <div className="d-flex flex-column">

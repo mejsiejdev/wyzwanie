@@ -62,16 +62,15 @@ const Create = () => {
       body: JSON.stringify(data),
     }).then((response) => {
       if (response.ok) navigate("/");
-      else{
-        setError('content', {type:'value', message:'Internal server error.'});
-        reset({}, {keepErrors:true, keepValues:true});
+      else {
+        setError("content", { type: "value", message: "Internal server error." });
+        reset({}, { keepErrors: true, keepValues: true });
       }
     });
   };
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-  
 
   return (
     <div
@@ -102,8 +101,9 @@ const Create = () => {
                 htmlFor={id + "-expiresAt"}
                 className="form-label d-flex gap-1 align-items-center">
                 <MdDateRange />
-                Expiration date
+                Due Date
               </label>
+              {/*               
               <input
                 {...register("expiresAt", { required: true })}
                 id={id + "-expiresAt"}
@@ -112,7 +112,28 @@ const Create = () => {
                   .toISOString()
                   .slice(0, tomorrow.toISOString().lastIndexOf(":"))}
                 className="form-control bg-light rounded-2 py-1 px-2"
-              />
+              /> */}
+
+              <select {...register("expiresAt", { required: true })} id={id + "-expiresAt"} className="form-select bg-light rounded-2 py-1 px-2">
+                <option selected disabled value={undefined}>
+                  Pick a due date
+                </option>
+                <option value={1}>
+                  A day from now
+                </option>
+                <option value={7}>
+                  A week from now
+                </option>
+                <option value={31}>
+                  A month from now
+                </option>
+                <option value={182}>
+                  6 months from now
+                </option>
+                <option value={365}>
+                  A year from now
+                </option>
+              </select>
             </div>
             <div className="d-flex flex-column">
               <label

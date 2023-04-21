@@ -54,32 +54,31 @@ export default function SignIn() {
       className="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
       style={{ maxWidth: "28rem" }}>
       <Box>
-        <p className="fs-1 text-center fw-bold">Sign in</p>
-        <form className="p-3" method="POST" onSubmit={handleSubmit(onSubmit)}>
+        <p className="fs-1 px-3 fw-semibold">Sign in</p>
+        <form className="px-3 pb-3" method="POST" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
-            <label className="form-label gap-1 items-center" htmlFor={id + "-name"}>
+            <label className="form-label gap-1 align-items-center" htmlFor={id + "-name"}>
               <MdPerson2 /> Username
             </label>
             <input
               {...register("name", { required: true })}
               type="text"
-              className="form-control bg-opacity-50"
+              className="form-control bg-light"
               id={id + "-name"}
-              style={{ backgroundColor: "rgb(213, 235, 214)" }}
+
               name="name"
             />
             {errors.name && <p className="text-danger mb-0">{errors.name.message}</p>}
           </div>
           <div className="mb-3">
-            <label className="form-label gap-1 items-center" htmlFor={id + "-password"}>
+            <label className="form-label gap-1 align-items-center" htmlFor={id + "-password"}>
               <MdPassword /> Password
             </label>
             <input
               {...register("password", { required: true })}
               type="password"
               id={id + "-password"}
-              style={{ backgroundColor: "rgb(213, 235, 214)" }}
-              className="form-control"
+              className="form-control bg-light"
             />
             {errors.name && <p className="text-danger mb-0">{errors.name.message}</p>}
           </div>

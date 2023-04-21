@@ -58,6 +58,28 @@ router.get("/", async (req, res) => {
   res.status(200).json(challenges);
 });
 
+// Route for getting data to /check/:id
+router.get("/:id", async (req, res) => {
+  // Find challenge with a provided id
+  const challenge = await prisma.challenge.findUnique({
+    where: {
+      id: req.params.id,
+    },
+  });
+  if (challenge) {
+    // Get data about author
+    const author = await prisma.user.findUnique({
+      where: {
+        id: challenge.authorId,
+      },
+    });
+    // Return it if everything is fine
+    res.status(200).json({ challenge: challenge, author: author });
+  } else {
+    res.status(401).end("Challenge does not exist.");
+  }
+});
+
 router.post("/", async (req, res) => {
   const { content, expiresAt, points, checker } = req.body;
   await prisma.challenge.create({

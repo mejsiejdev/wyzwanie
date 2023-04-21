@@ -7,7 +7,7 @@ import SignIn from "./routes/SignIn";
 import Create, { loader as CreateLoader } from "./routes/Create";
 import Photo from "./routes/Photo";
 import Profile, { loader as ProfileLoader } from "./routes/Profile";
-import Check from "./routes/Check";
+import Check, { loader as CheckLoader } from "./routes/Check";
 
 const router = createBrowserRouter([
   // Dashboard
@@ -18,6 +18,7 @@ const router = createBrowserRouter([
       {
         path: "/check/:id",
         element: <Check />,
+        loader: CheckLoader,
       },
     ],
   },

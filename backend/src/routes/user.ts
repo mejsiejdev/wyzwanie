@@ -126,6 +126,9 @@ router.get("/notifications", async (req, res) => {
   const notifications = await prisma.challenge.findMany({
     where: {
       checkerName: res.locals.username,
+      completedAt: {
+        not: null,
+      },
     },
     select: {
       author: {
@@ -135,7 +138,7 @@ router.get("/notifications", async (req, res) => {
         },
       },
       id: true,
-    }
+    },
   });
   res.status(200).json(notifications);
 });
@@ -171,8 +174,6 @@ router.get("/photo", async (req, res) => {
 // Load user's checkers
 router.get("/checker", async (req, res) => {
   const { id } = req.body;
-  console.log("Id: ", id);
-  console.log("Res locals: ", res.locals);
   // TODO: Only the friend of the user can be a checker
   const checkers = await prisma.user.findMany({
     where: {

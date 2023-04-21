@@ -199,18 +199,34 @@ const Notifications = () => {
         <Popover id="popover-contained">
           <Popover.Header as="h3">Notifications</Popover.Header>
           <Popover.Body className="d-flex flex-column gap-3">
-            {notifications &&
+            {notifications && notifications.length > 0 ? (
               notifications.map(({ author, id }, key) => (
                 <Link
                   key={key}
                   to={`/check/${id}`}
                   className="d-flex gap-3 align-items-center text-decoration-none text-black hover:">
-                  <img src={author.photo} alt={author.name} className="rounded-circle" width="48" />
+                  {author.photo != null ? (
+                    <img
+                      src={author.photo}
+                      alt={author.name}
+                      className="rounded-circle"
+                      width="48"
+                    />
+                  ) : (
+                    <div
+                      className="bg-light rounded-circle align-self-center d-flex align-items-center"
+                      style={{ width: "48", height: "48" }}>
+                      <MdPerson className="text-secondary" style={{ width: "42", height: "42" }} />
+                    </div>
+                  )}
                   <div>
                     <strong>{author.name}</strong> wants you to approve their challenge.
                   </div>
                 </Link>
-              ))}
+              ))
+            ) : (
+              <p className="mb-0">You don't have any notifications yet.</p>
+            )}
           </Popover.Body>
         </Popover>
       </Overlay>
@@ -315,9 +331,9 @@ const Challenge = ({ challenge, onClick }: { challenge: Challenge; onClick: () =
       <div>
         {challenge.completedAt != null ? (
           <p className="mb-0">
-          completed at <span className="fw-bold">{moment(challenge.createdAt).format("MMM Do, h:mm a")}</span>
-        </p>
-          
+            completed at{" "}
+            <span className="fw-bold">{moment(challenge.createdAt).format("MMM Do, h:mm a")}</span>
+          </p>
         ) : (
           <p className="mb-0">
             Must be completed by{" "}

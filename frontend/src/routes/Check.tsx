@@ -23,6 +23,18 @@ export const loader = async ({ params }: { params: { id: string } }) => {
 const Check = () => {
   // Get the data
   const { challenge, author } = useLoaderData() as { challenge: Challenge; author: User };
+  const check = async (approved: boolean) => {
+    await fetch("http://localhost:8000/challenge/check", {
+      method: "POST",
+      headers: {
+        Authorization: `${sessionStorage.getItem("JWT")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        approved: approved,
+      }),
+    });
+  };
   return (
     <div className="fixed-top min-vh-100 w-100" style={{ zIndex: 1080 }}>
       <div className="position-absolute w-100 bg-dark opacity-25 min-vh-100" />
@@ -69,8 +81,16 @@ const Check = () => {
             <h5 className="mb-0">Do you approve it?</h5>
             <div className="container">
               <div className="row gap-2">
-                <button className="col order-last btn btn-success w-100 fw-semibold">Yes</button>
-                <button className="col order-first btn btn-danger fw-semibold w-100">No</button>
+                <button
+                  onClick={() => check(true)}
+                  className="col order-last btn btn-success w-100 fw-semibold">
+                  Yes
+                </button>
+                <button
+                  onClick={() => check(false)}
+                  className="col order-first btn btn-danger fw-semibold w-100">
+                  No
+                </button>
               </div>
             </div>
           </div>

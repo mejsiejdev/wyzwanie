@@ -80,6 +80,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Route for getting data from /check/:id
+router.post("/check", async (req, res) => {
+  const { approved } = req.body;
+});
+
 router.post("/", async (req, res) => {
   const { content, expiresAt, points, checker } = req.body;
   await prisma.challenge.create({

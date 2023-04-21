@@ -1,9 +1,6 @@
 import { useId, useState } from "react";
-import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineUser } from "react-icons/ai";
-import { RiLockPasswordFill } from "react-icons/ri";
 import { MdPassword, MdPerson } from "react-icons/md";
 
 type Inputs = {

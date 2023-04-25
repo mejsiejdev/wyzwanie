@@ -1,8 +1,8 @@
 import { MdClose, MdPerson } from "react-icons/md";
 import { Link, useLoaderData } from "react-router-dom";
+import moment from "moment";
 import type Challenge from "../types/Challenge";
 import type User from "../types/User";
-import moment from "moment";
 
 export const loader = async ({ params }: { params: { id: string } }) => {
   try {
@@ -25,12 +25,13 @@ const Check = () => {
   const { challenge, author } = useLoaderData() as { challenge: Challenge; author: User };
   const check = async (approved: boolean) => {
     await fetch("http://localhost:8000/challenge/check", {
-      method: "POST",
+      method: "PUT",
       headers: {
         Authorization: `${sessionStorage.getItem("JWT")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        id: challenge.id,
         approved: approved,
       }),
     });

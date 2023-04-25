@@ -81,8 +81,18 @@ router.get("/:id", async (req, res) => {
 });
 
 // Route for getting data from /check/:id
-router.post("/check", async (req, res) => {
-  const { approved } = req.body;
+router.put("/check", async (req, res) => {
+  const { id, approved } = req.body;
+  await prisma.challenge.update({
+    where: {
+      id: id,
+    },
+    data: {
+      checkedAt: new Date(),
+      completedAt: approved ? undefined : null,
+    },
+  });
+  res.status(200).end("Successfully checked.");
 });
 
 router.post("/", async (req, res) => {

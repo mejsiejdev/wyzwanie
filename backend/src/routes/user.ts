@@ -83,7 +83,7 @@ router.post("/", async (req, res) => {
 });
 
 // Authenticate before doing anything
-router.use(["/photo", "/checker", "notifications"], async (req, res, next) => {
+router.use(["/photo", "/checker", "/notifications"], async (req, res, next) => {
   if (!req.headers.authorization) {
     res.status(401).end("Lack of authorization header.");
   } else {
@@ -125,7 +125,9 @@ router.use(["/photo", "/checker", "notifications"], async (req, res, next) => {
 router.get("/notifications", async (req, res) => {
   const notifications = await prisma.challenge.findMany({
     where: {
-      checkerName: res.locals.username,
+      checkerName: {
+        equals: res.locals.username,
+      },
       completedAt: {
         not: null,
       },

@@ -8,3 +8,11 @@
     opacity: 0;
   }
 }
+
+.icon{
+  transition:all 0.25s ease-in-out
+}
+
+.icon:hover {
+  transform: scale(1.25);
+}

@@ -1,4 +1,5 @@
-import express from "express";
+import { Prisma } from "@prisma/client";
+import express, { response } from "express";
 import { verify } from "jsonwebtoken";
 import { prisma } from "../../lib/db";
 
@@ -156,6 +157,17 @@ router.patch("/", async (req, res) => {
     // Return server error if something goes wrong
     res.status(500).end("Server error.");
   }
+});
+
+// Remove Challenge
+router.post("/remove", async (req, res) => {
+  const { id } = req.body;
+  await prisma.challenge.delete({
+    where: {
+      id: id,
+    },
+  });
+  res.status(201).end("Successfully deleted challenge.")
 });
 
 export default router;

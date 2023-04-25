@@ -7,6 +7,7 @@ import {
   MdPerson,
   MdRefresh,
   MdSearch,
+  MdDelete,
 } from "react-icons/md";
 import Box from "../components/Box";
 import { Button, Overlay, Popover, Tooltip } from "react-bootstrap";
@@ -302,22 +303,58 @@ const Challenge = ({ challenge, onClick }: { challenge: Challenge; onClick: () =
       }
     });
   };
+
+  const removeChallenge = async () => {
+    setLoading(true);
+
+    await fetch(`http://localhost:8000/challenge/remove`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${sessionStorage.getItem("JWT")}`,
+      },
+      body: JSON.stringify({
+        id: challenge.id,
+      }),
+    }).then((response) => {
+      if (response.ok) {
+        setLoading(false);
+        console.log(response.statusText);
+        onClick();
+      }
+    });
+  };
   return (
     <Box>
       <div className="d-flex flex-row align-items-center justify-content-between gap-3">
         <h3>{challenge.content}</h3>
-        <Button
-          // @ts-ignore
-          disabled={loading || challenge.completedAt}
-          title="Mark as completed"
-          onClick={!challenge.completedAt ? setAsCompleted : undefined}
-          variant={challenge.completedAt ? "success" : "unstyled"}>
-          {!loading ? (
-            <MdCheck style={{ fontSize: "2rem", flex: "none" }} />
-          ) : (
-            <MdRefresh style={{ fontSize: "2rem", flex: "none" }} />
-          )}
-        </Button>
+        <div className="d-flex flex-row gap-2">
+          <Button
+            // @ts-ignore
+            disabled={loading || challenge.completedAt}
+            title="Mark as completed"
+            onClick={!challenge.completedAt ? setAsCompleted : undefined}
+            variant={challenge.completedAt ? "success" : "unstyled"}>
+            {!loading ? (
+              <MdCheck className="icon" style={{ fontSize: "2rem", flex: "none" }} />
+            ) : (
+              <MdRefresh className="icon" style={{ fontSize: "2rem", flex: "none" }} />
+            )}
+          </Button>
+
+          <Button
+            // @ts-ignore
+            title="Remove challenge"
+            onClick={removeChallenge}
+            variant={challenge.completedAt ? "danger" : "unstyled"}>
+            {!loading ? (
+              <MdDelete className="icon" style={{ fontSize: "2rem", flex: "none" }} />
+            ) : (
+              <MdRefresh className="icon" style={{ fontSize: "2rem", flex: "none" }} />
+            )}
+          </Button>
+        </div>
       </div>
       <div className="pt-2">
         {challenge.completedAt != null ? (

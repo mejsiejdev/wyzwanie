@@ -92,7 +92,7 @@ router.put("/check", async (req, res) => {
       completedAt: approved ? undefined : null,
     },
   });
-  res.status(200).end("Successfully checked.");
+  res.status(200).end(`Successfully ${!approved ? "dis" : ""}approved.`);
 });
 
 router.post("/", async (req, res) => {

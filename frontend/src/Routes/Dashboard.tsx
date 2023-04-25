@@ -12,16 +12,7 @@ import Box from "../components/Box";
 import { Button, Overlay, Popover, Tooltip } from "react-bootstrap";
 import useDebounce from "../hooks/useDebounce";
 import moment from "moment";
-
-type Challenge = {
-  id: string;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-  expiresAt: Date;
-  completedAt?: Date;
-  points: number;
-};
+import type Challenge from "../types/Challenge";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -328,11 +319,28 @@ const Challenge = ({ challenge, onClick }: { challenge: Challenge; onClick: () =
           )}
         </Button>
       </div>
-      <div>
+      <div className="pt-2">
         {challenge.completedAt != null ? (
           <p className="mb-0">
             completed at{" "}
             <span className="fw-bold">{moment(challenge.createdAt).format("MMM Do, h:mm a")}</span>
+            {challenge.checkerName && (
+              <>
+                , {challenge.checkedAt ? "approved by " : "awaiting approval from "}
+                <Link className="text-decoration-none fw-semibold" to={`/${challenge.checkerName}`}>
+                  {challenge.checkerName}
+                </Link>
+                {challenge.checkedAt && (
+                  <>
+                    {" "}
+                    at{" "}
+                    <span className="fw-bold">
+                      {moment(challenge.checkedAt).format("MMM Do, h:mm a")}
+                    </span>
+                  </>
+                )}
+              </>
+            )}
           </p>
         ) : (
           <p className="mb-0">

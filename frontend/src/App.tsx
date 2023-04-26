@@ -18,6 +18,7 @@ const router = createBrowserRouter([
       {
         path: "/check/:id",
         element: <Check />,
+        // @ts-ignore
         loader: CheckLoader,
       },
     ],
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
   {
     path: "/:name",
     element: <Profile />,
+    // @ts-ignore
     loader: ProfileLoader,
   },
   // Create task

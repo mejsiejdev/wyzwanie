@@ -131,6 +131,9 @@ router.get("/notifications", async (req, res) => {
       completedAt: {
         not: null,
       },
+      checkedAt: {
+        equals: undefined
+      },
     },
     select: {
       author: {
@@ -140,8 +143,11 @@ router.get("/notifications", async (req, res) => {
         },
       },
       id: true,
+      checkedAt: true,
+      completedAt: true
     },
   });
+  console.log(notifications);
   res.status(200).json(notifications);
 });
 

@@ -1,5 +1,5 @@
 import { MdClose, MdPerson } from "react-icons/md";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import moment from "moment";
 import type Challenge from "../types/Challenge";
 import type User from "../types/User";
@@ -21,6 +21,8 @@ export const loader = async ({ params }: { params: { id: string } }) => {
 };
 
 const Check = () => {
+  const navigate = useNavigate();
+
   // Get the data
   const { challenge, author } = useLoaderData() as { challenge: Challenge; author: User };
   const check = async (approved: boolean) => {
@@ -34,6 +36,14 @@ const Check = () => {
         id: challenge.id,
         approved: approved,
       }),
+    }).then((response) => {
+      if (response.ok){
+        navigate('/');
+      } else if (response.status === 401){
+        navigate('/signin');
+      } else if(response.status === 500){
+        console.log('Internal server error, please try again later');
+      }
     });
   };
   return (

@@ -3,6 +3,7 @@ import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import moment from "moment";
 import type Challenge from "../types/Challenge";
 import type User from "../types/User";
+import { toast } from "react-toastify";
 
 export const loader = async ({ params }: { params: { id: string } }) => {
   try {
@@ -37,12 +38,13 @@ const Check = () => {
         approved: approved,
       }),
     }).then((response) => {
-      if (response.ok) {
-        navigate("/");
-      } else if (response.status === 401) {
-        navigate("/signin");
-      } else if (response.status === 500) {
-        console.log("Internal server error, please try again later");
+      if (response.ok){
+        navigate('/');
+        toast.success('Task approved!');
+      } else if (response.status === 401){
+        navigate('/signin');
+      } else if(response.status === 500){
+        console.log('Internal server error, please try again later');
       }
     });
   };

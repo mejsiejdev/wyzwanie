@@ -1,13 +1,16 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // Import elements for routes
-import Dashboard from "./routes/Dashboard";
-import Register from "./routes/Register";
-import SignIn from "./routes/SignIn";
-import Create, { loader as CreateLoader } from "./routes/Create";
-import Photo from "./routes/Photo";
-import Profile, { loader as ProfileLoader } from "./routes/Profile";
-import Check, { loader as CheckLoader } from "./routes/Check";
+import Dashboard from "./Routes/Dashboard";
+import Register from "./Routes/Register";
+import SignIn from "./Routes/SignIn";
+import Create, { loader as CreateLoader } from "./Routes/Create";
+import Photo from "./Routes/Photo";
+import Profile, { loader as ProfileLoader } from "./Routes/Profile";
+import Check, { loader as CheckLoader } from "./Routes/Check";
+
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   // Dashboard
@@ -54,11 +57,24 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => (
-  <div className="d-flex w-100 min-vh-100 p-3">
-    <div className="d-flex w-100 container flex-column align-items-center gap-3">
-      <RouterProvider router={router} />
+  <>
+    <ToastContainer
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+    />
+    <div className="d-flex w-100 min-vh-100 p-3">
+      <div className="d-flex w-100 container flex-column align-items-center gap-3">
+        <RouterProvider router={router} />
+      </div>
     </div>
-  </div>
+  </>
 );
 
 export default App;

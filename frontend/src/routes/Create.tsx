@@ -9,6 +9,7 @@ import {
   MdStarRate,
   MdTextsms,
 } from "react-icons/md";
+import { toast } from 'react-toastify';
 
 type Inputs = {
   content: string;
@@ -68,7 +69,10 @@ const Create = () => {
         checker: data.checker !== "Select a checker" ? data.checker : undefined,
       }),
     }).then((response) => {
-      if (response.ok) navigate("/");
+      if (response.ok) {
+        navigate("/");
+        toast.success('Task succesfully added!');    
+      }
       else {
         setError("content", { type: "value", message: "Internal server error." });
         reset({}, { keepErrors: true, keepValues: true });

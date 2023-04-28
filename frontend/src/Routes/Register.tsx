@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { MdPassword, MdPerson } from "react-icons/md";
+import { toast } from "react-toastify";
 
 type Inputs = {
   name: string;
@@ -41,6 +42,7 @@ const Register = () => {
         if (data) {
           sessionStorage.setItem("JWT", data);
           navigate("/photo");
+          toast.success('Account created!');
         }
       });
     setLoading(false);

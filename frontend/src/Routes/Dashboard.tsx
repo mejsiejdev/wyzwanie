@@ -14,6 +14,7 @@ import { Button, Overlay, Popover, Tooltip } from "react-bootstrap";
 import useDebounce from "../hooks/useDebounce";
 import moment from "moment";
 import type Challenge from "../types/Challenge";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -300,6 +301,7 @@ const Challenge = ({ challenge, onClick }: { challenge: Challenge; onClick: () =
       if (response.ok) {
         console.log(response.statusText);
         onClick();
+        toast.success('Task completed! Awaiting approval...');
       }
     });
   };
@@ -322,6 +324,7 @@ const Challenge = ({ challenge, onClick }: { challenge: Challenge; onClick: () =
         setLoading(false);
         console.log(response.statusText);
         onClick();
+        toast.success('Task removed!');
       }
     });
   };

@@ -1,7 +1,6 @@
 import { useId } from "react";
 import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Box from "../components/Box";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import {
   MdArrowBackIosNew,
@@ -66,7 +65,7 @@ const Create = () => {
         content: data.content,
         expiresAt: date,
         points: data.points,
-        checker: data.checker
+        checker: data.checker !== "Select a checker" ? data.checker : undefined,
       }),
     }).then((response) => {
       if (response.ok) navigate("/");
@@ -76,24 +75,6 @@ const Create = () => {
       }
     });
   };
-  // const today = new Date();
-  // const tommorow = new Date();
-  // tommorow.setDate(today.getDate() + 1);
-
-  // const inaweek = new Date();
-  // inaweek.setDate(today.getDate() + 7);
-
-  // const inamonth = new Date();
-  // inamonth.setMonth(today.getMonth() + 1);
-
-  // const insixmonths = new Date(); 
-  // insixmonths.setMonth(today.getMonth() + 6);
-
-  // const inayear = new Date();
-  // inayear.setFullYear(today.getFullYear() + 1);
-
-
-
   return (
     <div
       className="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
@@ -125,25 +106,13 @@ const Create = () => {
                 <MdDateRange />
                 Due Date
               </label>
-              {/*               
-              <input
-                {...register("expiresAt", { required: true })}
-                id={id + "-expiresAt"}
-                type={"datetime-local"}
-                defaultValue={tomorrow
-                  .toISOString()
-                  .slice(0, tomorrow.toISOString().lastIndexOf(":"))}
-                className="form-control bg-light rounded-2 py-1 px-2"
-              /> */}
-
               <select
                 {...register("expiresAt", { required: true })}
                 id={id + "-expiresAt"}
                 className="form-select bg-light rounded-2 py-1 px-2">
-                <option selected disabled value={undefined}>
-                  Pick a due date
+                <option selected value={1}>
+                  A day from now
                 </option>
-                <option value={1}>A day from now</option>
                 <option value={7}>A week from now</option>
                 <option value={31}>A month from now</option>
                 <option value={182}>6 months from now</option>

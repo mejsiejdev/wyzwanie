@@ -1,7 +1,6 @@
 import { useId } from "react";
 import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Box from "../components/Box";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import {
   MdArrowBackIosNew,
@@ -10,6 +9,7 @@ import {
   MdStarRate,
   MdTextsms,
 } from "react-icons/md";
+import { toast } from 'react-toastify';
 
 type Inputs = {
   content: string;
@@ -69,7 +69,10 @@ const Create = () => {
         checker: data.checker
       }),
     }).then((response) => {
-      if (response.ok) navigate("/");
+      if (response.ok) {
+        navigate("/");
+        toast.success('Task succesfully added!');    
+      }
       else {
         setError("content", { type: "value", message: "Internal server error." });
         reset({}, { keepErrors: true, keepValues: true });

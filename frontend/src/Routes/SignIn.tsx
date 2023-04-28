@@ -3,6 +3,7 @@ import { MdPerson2, MdPassword } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Box from "../components/Box/Box";
+import { toast } from "react-toastify";
 
 type Inputs = {
   name: String;
@@ -44,6 +45,7 @@ export default function SignIn() {
         if (data) {
           sessionStorage.setItem("JWT", data);
           navigate("/");
+          toast.success('Succesfully signed in!');
         }
       });
     setLoading(false);

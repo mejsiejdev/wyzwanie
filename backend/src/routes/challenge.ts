@@ -167,7 +167,7 @@ router.post("/remove", async (req, res) => {
       id: id,
     },
   });
-  res.status(201).end("Successfully deleted challenge.")
+  res.status(201).end("Successfully deleted challenge.");
 });
 
 export default router;

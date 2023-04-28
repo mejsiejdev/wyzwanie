@@ -348,6 +348,7 @@ const Challenge = ({ challenge, onClick }: { challenge: Challenge; onClick: () =
 
           <Button
             // @ts-ignore
+            disabled={loading}
             title="Remove challenge"
             onClick={removeChallenge}
             variant={challenge.completedAt ? "danger" : "unstyled"}>

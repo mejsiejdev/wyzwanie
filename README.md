@@ -19,7 +19,7 @@ Po jego zainstalowaniu i uruchomieniu należy wykonać dwie komendy:
 
 2. Uruchomić je
 
-   > Uwaga! W przypadku posiadania uruchomionego serwisu MongoDB na komputerze, należy go wyłączyć za pomocą komendy **net stop mongodb**, przed uruchomieniem obrazów, inaczej nie uruchomi się obraz MongoDB
+   > Uwaga! W przypadku posiadania uruchomionego serwisu MongoDB na komputerze, należy go wyłączyć za pomocą komendy **net stop mongodb**, przed uruchomieniem obrazów, inaczej nie uruchomi się obraz MongoDB, przez co aplikacja nie będzie działać.
 
    ```bash
    docker compose up

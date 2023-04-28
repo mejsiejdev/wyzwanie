@@ -83,43 +83,46 @@ router.post("/", async (req, res) => {
 });
 
 // Authenticate before doing anything
-router.use(["/photo", "/checker", "/notifications"], async (req, res, next) => {
-  if (!req.headers.authorization) {
-    res.status(401).end("Lack of authorization header.");
-  } else {
-    try {
-      const decoded = verify(
-        req.headers.authorization,
-        process.env.JWT_SECRET!
-      );
+router.use(
+  ["/photo", "/checker", "/notifications", "/:name"],
+  async (req, res, next) => {
+    if (!req.headers.authorization) {
+      res.status(401).end("Lack of authorization header.");
+    } else {
       try {
-        const user = await prisma.user.findUnique({
-          where: {
+        const decoded = verify(
+          req.headers.authorization,
+          process.env.JWT_SECRET!
+        );
+        try {
+          const user = await prisma.user.findUnique({
+            where: {
+              // @ts-ignore
+              name: decoded.name,
+            },
+          });
+          if (
+            !user ||
             // @ts-ignore
-            name: decoded.name,
-          },
-        });
-        if (
-          !user ||
-          // @ts-ignore
-          user.password != decoded.password ||
-          // @ts-ignore
-          user.id != decoded.id
-        ) {
-          res.status(401).end("Falsified token.");
-        } else {
-          res.locals.userId = user.id;
-          res.locals.username = user.name;
-          next();
+            user.password != decoded.password ||
+            // @ts-ignore
+            user.id != decoded.id
+          ) {
+            res.status(401).end("Falsified token.");
+          } else {
+            res.locals.userId = user.id;
+            res.locals.username = user.name;
+            next();
+          }
+        } catch {
+          res.status(500).end("Server error.");
         }
       } catch {
-        res.status(500).end("Server error.");
+        res.status(401).end("Invalid token.");
       }
-    } catch {
-      res.status(401).end("Invalid token.");
     }
   }
-});
+);
 
 // User notifications
 router.get("/notifications", async (req, res) => {
@@ -199,13 +202,17 @@ router.get("/:name", async (req, res) => {
       name: req.params.name,
     },
     select: {
+      id: true,
       name: true,
       photo: true,
       points: true,
       createdAt: true,
     },
   });
-  return res.status(200).json(user);
+  console.log(req.params.name, res.locals.userId);
+  return res
+    .status(200)
+    .json({ ...user, owner: user?.id === res.locals.userId });
 });
 
 export default router;

@@ -129,10 +129,10 @@ router.get("/notifications", async (req, res) => {
         equals: res.locals.username,
       },
       completedAt: {
-        not: null,
+        isSet: true,
       },
       checkedAt: {
-        equals: undefined
+        isSet: false,
       },
     },
     select: {
@@ -144,10 +144,9 @@ router.get("/notifications", async (req, res) => {
       },
       id: true,
       checkedAt: true,
-      completedAt: true
+      completedAt: true,
     },
   });
-  console.log(notifications);
   res.status(200).json(notifications);
 });
 

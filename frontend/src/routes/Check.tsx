@@ -37,12 +37,12 @@ const Check = () => {
         approved: approved,
       }),
     }).then((response) => {
-      if (response.ok){
-        navigate('/');
-      } else if (response.status === 401){
-        navigate('/signin');
-      } else if(response.status === 500){
-        console.log('Internal server error, please try again later');
+      if (response.ok) {
+        navigate("/");
+      } else if (response.status === 401) {
+        navigate("/signin");
+      } else if (response.status === 500) {
+        console.log("Internal server error, please try again later");
       }
     });
   };
